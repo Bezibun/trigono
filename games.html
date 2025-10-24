@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modul Trigonometri</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Konfigurasi Tailwind agar support dark mode dengan class
@@ -118,34 +119,75 @@
     });
   </script>
 
-  <!-- Section Hero -->
-  <section class="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden transition-colors duration-500">
-    <div class="absolute inset-0">
-      <div class="absolute w-72 h-72 bg-blue-200 dark:bg-blue-900 rounded-full blur-3xl opacity-30 -top-20 -left-20 animate-pulse"></div>
-      <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-950 rounded-full blur-3xl opacity-30 bottom-0 right-0 animate-pulse"></div>
+
+
+
+<!-- Section: Games -->
+<!-- Section: Games -->
+<!-- Section: Games -->
+<section class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 px-6 py-20">
+  <h2 class="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-12 tracking-wide text-center">
+    <i class='bx bxs-joystick text-blue-600 dark:text-blue-400 mr-2 mt-8'></i>
+    Games Pembelajaran
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
+
+    <!-- Card 1 -->
+    <div class="group relative bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded-3xl p-8 shadow-lg hover:shadow-blue-200/50 dark:hover:shadow-blue-500/20 transition-all duration-500 hover:scale-[1.03] cursor-pointer">
+      <div class="absolute inset-0 bg-gradient-to-tr from-blue-100/30 to-transparent dark:from-blue-500/10 rounded-3xl"></div>
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <i class='bx bxs-brain text-6xl text-blue-600 dark:text-blue-400 mb-4 animate-pulse'></i>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Trigonometri Quiz</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Uji pemahamanmu tentang rumus sinus, cosinus, dan tangen melalui kuis interaktif.</p>
+        <button class="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition-all duration-300">
+          Main Sekarang
+        </button>
+      </div>
     </div>
 
-    <div class="relative text-center px-6 mt-20">
-      <h1 class="text-4xl md:text-6xl font-bold text-blue-800 dark:text-blue-400 mb-4 animate-fadeInUp">
-        Coming<br>
-        <span class="text-blue-600 dark:text-blue-300">Soon</span>
-      </h1>
-      <p class="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto text-lg md:text-xl mb-8 animate-fadeInUp delay-200">
-        Practice makes perfect. Be patient. Success in learning is a marathon, not a sprint. Mistakes are proof that you are trying.
-      </p>
-  </section>
+    <!-- Card 2 -->
+    <div class="group relative bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded-3xl p-8 shadow-lg hover:shadow-blue-200/50 dark:hover:shadow-blue-500/20 transition-all duration-500 hover:scale-[1.03] cursor-pointer">
+      <div class="absolute inset-0 bg-gradient-to-tr from-blue-100/30 to-transparent dark:from-blue-500/10 rounded-3xl"></div>
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <i class='bx bxs-dice-5 text-6xl text-blue-600 dark:text-blue-400 mb-4 animate-bounce'></i>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Trigono Match</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Cocokkan soal dan jawaban dengan cepat untuk mengasah kecepatan berpikir matematismu!</p>
+        <button class="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition-all duration-300">
+          Coming Soon
+        </button>
+      </div>
+    </div>
 
-  <!-- Animasi -->
-  <style>
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fadeInUp { animation: fadeInUp 0.8s ease forwards; }
-  </style>
+    <!-- Card 3 -->
+    <div class="group relative bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded-3xl p-8 shadow-lg hover:shadow-blue-200/50 dark:hover:shadow-blue-500/20 transition-all duration-500 hover:scale-[1.03] cursor-pointer">
+      <div class="absolute inset-0 bg-gradient-to-tr from-blue-100/30 to-transparent dark:from-blue-500/10 rounded-3xl"></div>
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <i class='bx bxs-joystick-alt text-6xl text-blue-600 dark:text-blue-400 mb-4 animate-spin-slow'></i>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Trigono Adventure</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Petualangan seru memecahkan misteri sudut dan sisi dalam dunia trigonometri.</p>
+        <button class="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition-all duration-300">
+          Coming Soon
+        </button>
+      </div>
+    </div>
 
-</body>
-</html>
+  </div>
+</section>
+
+<!-- Boxicons CDN -->
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<!-- Animasi Custom -->
+<style>
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
 
 
 </body>
