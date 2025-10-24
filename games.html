@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Trigonometri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Konfigurasi Tailwind agar support dark mode dengan class
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-500">
+
+  <!-- Navbar -->
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 text-black dark:text-white px-4 py-2 rounded-full shadow-lg flex items-center justify-between w-[90%] md:w-[70%] lg:w-[60%] z-50 transition-all duration-300">
+
+    <!-- Left Icon -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md flex items-center justify-center">
+        <img src="source/foto/logo.png" alt="Logo LSPL HANAS" class="w-8 h-8 object-contain">
+      </div>
+    </div>
+
+    <!-- Menu Links -->
+    <ul class="hidden md:flex space-x-8 text-sm font-medium">
+      <li><a href="index.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Beranda</a></li>
+      <li><a href="materi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Materi</a></li>
+      <li><a href="latihan.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Latihan</a></li>
+      <li><a href="games.html" class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400 pb-1 transition">Games</a></li>
+      <li><a href="informasi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Informasi</a></li>
+    </ul>
+
+    <!-- Bagian kanan (Dark mode + Menu mobile) -->
+    <div class="flex items-center space-x-3">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="p-2 rounded-full bg-blue-700 dark:bg-gray-600 text-white focus:outline-none transition">
+        <!-- Icon Sun (Light Mode) -->
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.07 6.07l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- Icon Moon (Dark Mode) -->
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden flex items-center focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu"
+      class="hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex flex-col items-center py-4 space-y-4 md:hidden opacity-0 translate-y-[-10px] transition-all duration-500 ease-out">
+      <a href="index.html" class="hover:text-blue-700 dark:hover:text-blue-400">Beranda</a>
+      <a href="materi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Materi</a>
+      <a href="latihan.html" class="hover:text-blue-700 dark:hover:text-blue-400">Latihan</a>
+      <a href="games.html" class="hover:text-blue-700 dark:hover:text-blue-400">Games</a>
+      <a href="informasi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Informasi</a>
+    </div>
+  </nav>
+
+  <!-- Script Navbar & Dark Mode -->
+  <script>
+    // Navbar mobile toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+      if (!isOpen) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'translate-y-[-10px]');
+          mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+      } else {
+        mobileMenu.classList.add('opacity-0', 'translate-y-[-10px]');
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 400);
+      }
+      isOpen = !isOpen;
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      sunIcon.classList.toggle('hidden', !isDark);
+      moonIcon.classList.toggle('hidden', isDark);
+    });
+  </script>
+
+  <!-- Section Hero -->
+  <section class="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden transition-colors duration-500">
+    <div class="absolute inset-0">
+      <div class="absolute w-72 h-72 bg-blue-200 dark:bg-blue-900 rounded-full blur-3xl opacity-30 -top-20 -left-20 animate-pulse"></div>
+      <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-950 rounded-full blur-3xl opacity-30 bottom-0 right-0 animate-pulse"></div>
+    </div>
+
+    <div class="relative text-center px-6 mt-20">
+      <h1 class="text-4xl md:text-6xl font-bold text-blue-800 dark:text-blue-400 mb-4 animate-fadeInUp">
+        Coming<br>
+        <span class="text-blue-600 dark:text-blue-300">Soon</span>
+      </h1>
+      <p class="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto text-lg md:text-xl mb-8 animate-fadeInUp delay-200">
+        Practice makes perfect. Be patient. Success in learning is a marathon, not a sprint. Mistakes are proof that you are trying.
+      </p>
+  </section>
+
+  <!-- Animasi -->
+  <style>
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeInUp { animation: fadeInUp 0.8s ease forwards; }
+  </style>
+
+</body>
+</html>
+
+
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Trigonometri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-500">
+
+  <!-- Navbar -->
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 text-black dark:text-white px-4 py-2 rounded-full shadow-lg flex items-center justify-between w-[90%] md:w-[70%] lg:w-[60%] z-50 transition-all duration-300">
+
+    <!-- Left Icon -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md flex items-center justify-center">
+        <img src="source/foto/logo.png" alt="Logo LSPL HANAS" class="w-8 h-8 object-contain">
+      </div>
+    </div>
+
+    <!-- Menu Links -->
+    <ul class="hidden md:flex space-x-8 text-sm font-medium">
+      <li><a href="index.html" class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400 pb-1 transition">Beranda</a></li>
+      <li><a href="materi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Materi</a></li>
+      <li><a href="latihan.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Latihan</a></li>
+      <li><a href="games.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Games</a></li>
+      <li><a href="informasi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Informasi</a></li>
+    </ul>
+
+    <!-- Bagian kanan (Dark mode + Menu mobile) -->
+    <div class="flex items-center space-x-3">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="p-2 rounded-full bg-blue-700 dark:bg-gray-600 text-white focus:outline-none transition">
+        <!-- Icon Sun (Light Mode) -->
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.07 6.07l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- Icon Moon (Dark Mode) -->
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden flex items-center focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu"
+      class="hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex flex-col items-center py-4 space-y-4 md:hidden opacity-0 translate-y-[-10px] transition-all duration-500 ease-out">
+      <a href="index.html" class="hover:text-blue-700 dark:hover:text-blue-400">Beranda</a>
+      <a href="materi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Materi</a>
+      <a href="latihan.html" class="hover:text-blue-700 dark:hover:text-blue-400">Latihan</a>
+      <a href="games.html" class="hover:text-blue-700 dark:hover:text-blue-400">Games</a>
+      <a href="informasi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Informasi</a>
+    </div>
+  </nav>
+
+  <!-- Script Navbar & Dark Mode -->
+  <script>
+    // Navbar mobile toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+      if (!isOpen) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'translate-y-[-10px]');
+          mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+      } else {
+        mobileMenu.classList.add('opacity-0', 'translate-y-[-10px]');
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 400);
+      }
+      isOpen = !isOpen;
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      sunIcon.classList.toggle('hidden', !isDark);
+      moonIcon.classList.toggle('hidden', isDark);
+    });
+  </script>
+
+  <!-- Section Hero -->
+  <section class="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden transition-colors duration-500">
+    <div class="absolute inset-0">
+      <div class="absolute w-72 h-72 bg-blue-200 dark:bg-blue-900 rounded-full blur-3xl opacity-30 -top-20 -left-20 animate-pulse"></div>
+      <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-950 rounded-full blur-3xl opacity-30 bottom-0 right-0 animate-pulse"></div>
+    </div>
+
+    <div class="relative text-center px-6 mt-20">
+      <h1 class="text-4xl md:text-6xl font-bold text-blue-800 dark:text-blue-400 mb-4 animate-fadeInUp">
+        Selamat Datang<br>
+        <span class="text-blue-600 dark:text-blue-300">E-Modul Trigonometri</span>
+      </h1>
+      <p class="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto text-lg md:text-xl mb-8 animate-fadeInUp delay-200">
+        Practice makes perfect. Be patient. Success in learning is a marathon, not a sprint. Mistakes are proof that you are trying.
+      </p>
+      <a href="materi.html"
+        class="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-400 transition duration-300 animate-fadeInUp delay-300">
+        Mulai Belajar
+      </a>
+    </div>
+  </section>
+
+  <!-- Animasi -->
+  <style>
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeInUp { animation: fadeInUp 0.8s ease forwards; }
+  </style>
+
+
+
+
+
+<!-- Section Capaian dan Tujuan Pembelajaran -->
+<section class="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 py-16 px-4 sm:px-8 lg:px-16 dark:from-gray-900 dark:to-gray-800 transition-colors duration-500">
+  <!-- Judul Utama -->
+  <div class="text-center mb-12">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-4 dark:text-white transition-colors duration-500">
+      Capaian & Tujuan Pembelajaran
+    </h1>
+    <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed transition-colors duration-500">
+      Melalui capaian dan tujuan pembelajaran ini, peserta didik diharapkan dapat belajar lebih efektif serta menguasai kompetensi yang ditetapkan.
+    </p>
+  </div>
+
+  <!-- Kontainer Utama -->
+  <div class="relative max-w-5xl w-full space-y-10">
+
+    <!-- Capaian Pembelajaran -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-6 sm:p-8 md:p-10 border border-blue-100 dark:border-gray-700 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl animate-fadeInUp">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-blue-900 dark:text-blue-400 mb-4 border-b-4 border-blue-800 dark:border-blue-500 inline-block pb-1 transition-colors duration-500">
+        Capaian Pembelajaran
+      </h2>
+      <p class="text-gray-700 dark:text-gray-200 text-base sm:text-lg leading-relaxed transition-colors duration-500">
+        Di akhir fase E, peserta didik dapat menyelesaikan permasalahan segitiga siku-siku yang melibatkan perbandingan trigonometri dan aplikasinya.
+      </p>
+    </div>
+
+    <!-- Tujuan Pembelajaran -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-6 sm:p-8 md:p-10 border border-blue-100 dark:border-gray-700 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl animate-fadeInUp delay-200">
+      <h2 class="text-2xl sm:text-3xl font-semibold text-blue-900 dark:text-blue-400 mb-4 border-b-4 border-blue-800 dark:border-blue-500 inline-block pb-1 transition-colors duration-500">
+        Tujuan Pembelajaran
+      </h2>
+      <ul class="list-disc list-inside text-gray-700 dark:text-gray-200 text-base sm:text-lg space-y-3 leading-relaxed transition-colors duration-500">
+        <li>Peserta didik dapat menjelaskan konsep perbandingan trigonometri (sin, cos, tan, dan kebalikannya) pada segitiga siku-siku.</li>
+        <li>Peserta didik dapat menentukan nilai perbandingan trigonometri berdasarkan panjang sisi segitiga siku-siku.</li>
+        <li>Peserta didik dapat menggunakan tabel atau kalkulator trigonometri untuk menentukan besar sudut atau panjang sisi segitiga siku-siku.</li>
+        <li>Peserta didik dapat menyelesaikan soal kontekstual yang melibatkan perbandingan trigonometri (misalnya tinggi benda, panjang bayangan, jarak, dll).</li>
+        <li>Peserta didik dapat menyajikan penyelesaian permasalahan trigonometri dalam bentuk langkah-langkah yang runtut dan logis.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- Tambahkan animasi sederhana -->
+<style>
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+</style>
+
+
+<!-- Section Fitur Pembelajaran -->
+<section class="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 py-20 px-6 sm:px-10 lg:px-16 transition-colors duration-500">
+  
+  <!-- Judul -->
+  <div class="text-center mb-12">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white mb-4 transition-colors duration-500">
+      Fitur Pembelajaran
+    </h1>
+    <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed transition-colors duration-500">
+      Fitur-fitur utama yang membuat proses belajar lebih interaktif dan menyenangkan.
+    </p>
+  </div>
+
+  <!-- Grid Fitur -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl w-full">
+    
+    <!-- Fitur 1: Video Penjelasan -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-8 text-center border border-blue-100 dark:border-gray-700 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 animate-fadeInUp">
+      <i class='bx bx-play-circle text-5xl text-blue-700 dark:text-white mb-4'></i>
+      <h3 class="text-xl font-semibold text-blue-900 dark:text-blue-400 transition-colors duration-500">
+        Video Penjelasan
+      </h3>
+    </div>
+
+    <!-- Fitur 2: Rangkuman Materi -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-8 text-center border border-blue-100 dark:border-gray-700 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 animate-fadeInUp delay-100">
+      <i class='bx bx-book-open text-5xl text-blue-700 dark:text-white mb-4'></i>
+      <h3 class="text-xl font-semibold text-blue-900 dark:text-blue-400 transition-colors duration-500">
+        Rangkuman Materi
+      </h3>
+    </div>
+
+    <!-- Fitur 3: Quiz & Games -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-8 text-center border border-blue-100 dark:border-gray-700 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 animate-fadeInUp delay-200">
+      <i class='bx bx-game text-5xl text-blue-600 dark:text-white mb-4'></i>
+      <h3 class="text-xl font-semibold text-blue-900 dark:text-blue-400 transition-colors duration-500">
+        Quiz & Games
+      </h3>
+    </div>
+
+    <!-- Fitur 4: Akses Fleksibel -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/40 p-8 text-center border border-blue-100 dark:border-gray-700 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 animate-fadeInUp delay-300">
+      <i class='bx bx-devices text-5xl text-blue-700 dark:text-white mb-4'></i>
+      <h3 class="text-xl font-semibold text-blue-900 dark:text-blue-400 transition-colors duration-500">
+        Akses Fleksibel
+      </h3>
+    </div>
+
+  </div>
+</section>
+
+<!-- Animasi -->
+<style>
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+</style>
+
+<!-- Timeline Pembelajaran TGT -->
+<section class="py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition duration-300">
+  <div class="max-w-5xl mx-auto px-6">
+    <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-800 dark:text-blue-300 mb-2">
+      Timeline Pembelajaran TGT
+    </h1>
+    <p class="text-center text-gray-600 dark:text-gray-400 mb-16">
+      Alur kegiatan pembelajaran berdasarkan sintaks <span class="font-semibold text-blue-700 dark:text-blue-400">Teams Games Tournament</span>.
+    </p>
+
+    <div class="relative">
+      <!-- Garis Tengah (Desktop) -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-blue-500 dark:bg-blue-400 rounded-full hidden md:block"></div>
+      <!-- Garis Kiri (Mobile) -->
+      <div class="absolute left-5 md:hidden h-full w-1 bg-blue-500 dark:bg-blue-400 rounded-full"></div>
+
+      <!-- TEMPLATE STEP -->
+      <div class="space-y-12">
+
+        <!-- STEP 1 -->
+        <div class="relative flex md:justify-end md:pr-[52%]">
+          <!-- Card -->
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left md:text-right">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">1. Teams</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Guru membentuk kelompok belajar heterogen dan menjelaskan aturan kegiatan.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 10 menit</p>
+          </div>
+          <!-- Icon -->
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-group text-xl'></i>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="relative flex md:justify-start md:pl-[52%]">
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">2. Games</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Siswa bermain kuis berbasis game untuk memperdalam pemahaman konsep.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 25 menit</p>
+          </div>
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-joystick text-xl'></i>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="relative flex md:justify-end md:pr-[52%]">
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left md:text-right">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">3. Tournament</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Perwakilan tiap tim berkompetisi menjawab soal pada babak turnamen.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 30 menit</p>
+          </div>
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-trophy text-xl'></i>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="relative flex md:justify-start md:pl-[52%]">
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">4. Rekognisi Tim</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Guru memberikan penghargaan kepada tim dengan skor tertinggi.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 10 menit</p>
+          </div>
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-award text-xl'></i>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="relative flex md:justify-end md:pr-[52%]">
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left md:text-right">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">5. Refleksi</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Guru dan siswa melakukan refleksi terhadap hasil kegiatan dan pembelajaran.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 15 menit</p>
+          </div>
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-brain text-xl'></i>
+          </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="relative flex md:justify-start md:pl-[52%]">
+          <div class="bg-blue-100 dark:bg-gray-700 shadow-md rounded-2xl p-5 w-[85%] md:w-100% ml-12 md:ml-0 text-left">
+            <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg">6. Penutup</h3>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Guru menyimpulkan materi dan memberikan tindak lanjut pembelajaran.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Estimasi: 10 menit</p>
+          </div>
+          <div class="absolute left-[5px] md:left-1/2 md:-translate-x-1/2 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white w-10 h-10 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+            <i class='bx bxs-book text-xl'></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Boxicons & Animasi -->
+<style>
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+.delay-100 { animation-delay: 0.2s; }
+.delay-200 { animation-delay: 0.4s; }
+.delay-300 { animation-delay: 0.6s; }
+.delay-400 { animation-delay: 0.8s; }
+.delay-500 { animation-delay: 1s; }
+</style>
+
+
+<!-- Footer -->
+<footer class="bg-blue-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ">
+  <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Kolom 1 -->
+    <div>
+      <h3 class="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400">EduMath Website</h3>
+      <p class="text-sm leading-relaxed">
+        Media pembelajaran berbasis website yang interaktif dan inovatif untuk meningkatkan motivasi dan hasil belajar siswa.
+      </p>
+    </div>
+
+    <!-- Kolom 2 -->
+    <div>
+      <h3 class="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400">Navigasi Cepat</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-blue-500 dark:hover:text-blue-400 transition">Beranda</a></li>
+        <li><a href="#" class="hover:text-blue-500 dark:hover:text-blue-400 transition">Fitur</a></li>
+        <li><a href="#" class="hover:text-blue-500 dark:hover:text-blue-400 transition">Timeline</a></li>
+        <li><a href="#" class="hover:text-blue-500 dark:hover:text-blue-400 transition">Kontak</a></li>
+      </ul>
+    </div>
+
+    <!-- Kolom 3 -->
+    <div>
+      <h3 class="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400">Hubungi Kami</h3>
+      <ul class="text-sm space-y-2">
+        <li class="flex items-center gap-2">
+          <i class='bx bx-map text-lg'></i>
+          <span>UIN Sunan Ampel Surabaya, Indonesia</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <i class='bx bx-envelope text-lg'></i>
+          <span>edumath@kampus.ac.id</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <i class='bx bx-phone text-lg'></i>
+          <span>+62 812-3456-7890</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="border-t border-gray-300 dark:border-gray-700 mt-6 py-4 text-center text-sm">
+    <p>© 2025 <span class="font-semibold text-blue-600 dark:text-blue-400">EduMath</span>. All Rights Reserved.</p>
+    <div class="flex justify-center gap-4 mt-2 text-lg">
+      <a href="#" class="hover:text-blue-500 dark:hover:text-blue-400"><i class='bx bxl-facebook'></i></a>
+      <a href="#" class="hover:text-blue-500 dark:hover:text-blue-400"><i class='bx bxl-instagram'></i></a>
+      <a href="#" class="hover:text-blue-500 dark:hover:text-blue-400"><i class='bx bxl-youtube'></i></a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

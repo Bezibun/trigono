@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Trigonometri</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Konfigurasi Tailwind agar support dark mode dengan class
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+  <style>
+    body { transition: background-color 0.5s, color 0.5s; }
+    .fade { animation: fade 0.5s ease-in-out; }
+    @keyframes fade { from {opacity:0;} to {opacity:1;} }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-500">
+
+  <!-- Navbar -->
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 text-black dark:text-white px-4 py-2 rounded-full shadow-lg flex items-center justify-between w-[90%] md:w-[70%] lg:w-[60%] z-50 transition-all duration-300">
+
+    <!-- Left Icon -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md flex items-center justify-center">
+        <img src="source/foto/logo.png" alt="Logo LSPL HANAS" class="w-8 h-8 object-contain">
+      </div>
+    </div>
+
+    <!-- Menu Links -->
+    <ul class="hidden md:flex space-x-8 text-sm font-medium">
+      <li><a href="index.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Beranda</a></li>
+      <li><a href="materi.html" class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400 pb-1 transition">Materi</a></li>
+      <li><a href="latihan.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Latihan</a></li>
+      <li><a href="games.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Games</a></li>
+      <li><a href="informasi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Informasi</a></li>
+    </ul>
+
+    <!-- Bagian kanan (Dark mode + Menu mobile) -->
+    <div class="flex items-center space-x-3">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="p-2 rounded-full bg-blue-700 dark:bg-gray-600 text-white focus:outline-none transition">
+        <!-- Icon Sun (Light Mode) -->
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.07 6.07l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- Icon Moon (Dark Mode) -->
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden flex items-center focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu"
+      class="hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex flex-col items-center py-4 space-y-4 md:hidden opacity-0 translate-y-[-10px] transition-all duration-500 ease-out">
+      <a href="index.html" class="hover:text-blue-700 dark:hover:text-blue-400">Beranda</a>
+      <a href="materi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Materi</a>
+      <a href="latihan.html" class="hover:text-blue-700 dark:hover:text-blue-400">Latihan</a>
+      <a href="games.html" class="hover:text-blue-700 dark:hover:text-blue-400">Games</a>
+      <a href="informasi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Informasi</a>
+    </div>
+  </nav>
+
+  <!-- Script Navbar & Dark Mode -->
+  <script>
+    // Navbar mobile toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+      if (!isOpen) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'translate-y-[-10px]');
+          mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+      } else {
+        mobileMenu.classList.add('opacity-0', 'translate-y-[-10px]');
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 400);
+      }
+      isOpen = !isOpen;
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      sunIcon.classList.toggle('hidden', !isDark);
+      moonIcon.classList.toggle('hidden', isDark);
+    });
+  </script>
+
+
+
+<section class="relative text-center py-12 bg-white dark:bg-gray-900 transition-colors duration-500 ">
+  <!-- Efek gradasi lembut di background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 opacity-80"></div>
+
+  <div class="relative z-10 px-6">
+    <h1 class=" mt-20 text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-700 dark:text-blue-400 mb-4 leading-tight">
+      Penyajian Materi Trigonometri
+    </h1>
+    <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-base sm:text-lg">
+      Pelajari konsep dasar, identifikasi sisi, rasio trigonometri, hingga sudut istimewa secara interaktif.
+    </p>
+
+    <!-- Garis animasi glowing di bawah judul -->
+    <div class="mt-6 flex justify-center">
+      <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-full animate-pulse"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- Section: Video Pembelajaran -->
+<section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-500">
+  <div class="max-w-5xl mx-auto text-center px-6">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-700 dark:text-blue-300 mb-6">
+      Video Pembelajaran Trigonometri
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300 mb-8">
+      Tonton video pembelajaran berikut untuk memahami konsep trigonometri secara visual dan menyenangkan.
+    </p>
+
+    <!-- Video Container -->
+    <div class="relative w-full pb-[56.25%] rounded-2xl overflow-hidden shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 group">
+      
+      <!-- Video -->
+      <video
+        id="trigonoVideo"
+        class="absolute top-0 left-0 w-full h-full rounded-2xl hidden"
+        src="source/video/trigono.mp4"
+        preload="metadata"
+        controls>
+      </video>
+
+      <!-- Thumbnail + Play Button -->
+      <div id="thumbnail" 
+           class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-cover bg-center"
+           style="background-image: url('source/foto/bg-math.jpg');">
+        <button id="playButton"
+          class="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-6 md:p-8 shadow-lg transition-all duration-300 group-hover:scale-110">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 md:h-12 md:w-12" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Script Play Button -->
+<script>
+  const playButton = document.getElementById('playButton');
+  const thumbnail = document.getElementById('thumbnail');
+  const trigonoVideo = document.getElementById('trigonoVideo');
+
+  playButton.addEventListener('click', () => {
+    thumbnail.classList.add('hidden'); // sembunyikan thumbnail
+    trigonoVideo.classList.remove('hidden'); // tampilkan video
+    trigonoVideo.play(); // langsung play
+  });
+</script>
+
+
+
+<section class="max-w-7xl mx-auto px-6 py-16">
+  <!-- SUB MENU -->
+   
+  <div class="flex flex-wrap justify-center gap-4 mb-12">
+    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg scale-105 transition-all duration-200" data-tab="pengantar">
+      <span>Pengantar</span>
+    </button>
+    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="identifikasi">
+      <span>Identifikasi Sisi</span>
+    </button>
+    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="rasio">
+      <span>Rasio Trigonometri</span>
+    </button>
+    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="sudut">
+      <span>Sudut Istimewa</span>
+    </button>
+  </div>
+
+  <!-- KONTEN -->
+  <div id="tab-content" class="space-y-8">
+    <!-- BOX 1 -->
+    <div id="pengantar" class="tab-content animate-fade">
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-4">Apa Itu Trigonometri?</h2>
+            <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed text-justify">
+              Trigonometri adalah cabang matematika yang mempelajari hubungan antara <b>sisi dan sudut</b> pada segitiga. 
+              Konsep ini sangat penting dalam <b>fisika, teknik, arsitektur,</b> dan <b>astronomi</b>. 
+              Dengan trigonometri, kita dapat menghitung jarak, tinggi, atau sudut tanpa mengukurnya secara langsung.
+            </p>
+          </div>
+          <img src="source/foto/bg-pengantar.jpeg" class="rounded-2xl shadow-xl border border-gray-300 dark:border-gray-700 transform hover:scale-105 transition duration-300" alt="Ilustrasi Trigonometri">
+        </div>
+      </div>
+    </div>
+
+    <!-- BOX 2 -->
+    <div id="identifikasi" class="tab-content hidden animate-fade">
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
+        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Identifikasi Sisi Segitiga Siku-Siku</h2>
+        <div class="grid md:grid-cols-2 gap-10 mt-8 items-center">
+          <img src="source/foto/segitiga.jpeg" class="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 w-full md:w-80 mx-auto" alt="Segitiga Siku-siku">
+          <div class="space-y-5 text-lg">
+            <p><b>Sisi Miring:</b> sisi terpanjang yang berseberangan dengan sudut siku-siku.</p>
+            <p><b>Sisi Depan:</b> sisi di depan sudut θ.</p>
+            <p><b>Sisi Samping:</b> sisi yang berdekatan dengan sudut θ.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOX 3 -->
+    <div id="rasio" class="tab-content hidden animate-fade">
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition relative overflow-hidden">
+        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Rasio Trigonometri</h2>
+        <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full my-6">
+          <div id="progressBar" class="h-2 bg-gradient-to-r from-blue-400 to-indigo-600 rounded-full transition-all duration-500"></div>
+        </div>
+        <div id="ratioContent" class="transition-all duration-500 ease-in-out mt-6 text-center"></div>
+        <div class="flex justify-between mt-10">
+          <button id="prevBtn" class="px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold shadow-md hover:scale-105 transition flex items-center gap-2">
+            <i class='bx bx-chevron-left text-2xl'></i> Sebelumnya
+          </button>
+          <button id="nextBtn" class="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-semibold shadow-md hover:scale-105 transition flex items-center gap-2">
+            Selanjutnya <i class='bx bx-chevron-right text-2xl'></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOX 4 -->
+    <div id="sudut" class="tab-content hidden animate-fade">
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
+        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Sudut Istimewa Trigonometri</h2>
+        <p class="text-lg text-center mb-6 text-gray-700 dark:text-gray-300">Sudut istimewa adalah sudut yang memiliki nilai perbandingan trigonometri yang mudah diingat dan sering digunakan.</p>
+        <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+          <table class="w-full table-fixed text-center border-collapse">
+            <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+              <tr>
+                <th class="py-3 px-4 w-1/4">Sudut (°)</th>
+                <th class="w-1/4">sin θ</th>
+                <th class="w-1/4">cos θ</th>
+                <th class="w-1/4">tan θ</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-50 dark:bg-gray-900 dark:text-gray-300">
+              <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition">
+                <td class="py-3">0°</td><td>0</td><td>1</td><td>0</td>
+              </tr>
+              <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition">
+                <td class="py-3">30°</td><td>1/2</td><td>√3/2</td><td>1/√3</td>
+              </tr>
+              <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition">
+                <td class="py-3">45°</td><td>√2/2</td><td>√2/2</td><td>1</td>
+              </tr>
+              <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition">
+                <td class="py-3">60°</td><td>√3/2</td><td>1/2</td><td>√3</td>
+              </tr>
+              <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition">
+                <td class="py-3">90°</td><td>1</td><td>0</td><td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Section: Latihan Soal Trigonometri -->
+<section class="py-16 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-500">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-700 dark:text-blue-300 mb-6">
+      Latihan Soal Trigonometri
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
+      Uji pemahamanmu melalui latihan soal berikut. Setiap soal dilengkapi dengan pembahasan dan langkah penyelesaiannya.
+    </p>
+
+    <!-- Soal 1 -->
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 mb-8 text-left border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Soal 1</h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-4">
+        Sebuah segitiga siku-siku memiliki sudut A = 30°, dan sisi miring (c) = 10 cm. Tentukan panjang sisi di depan sudut A!
+      </p>
+
+      <div class="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl">
+        <h4 class="font-semibold text-blue-700 dark:text-blue-300 mb-2">Penyelesaian:</h4>
+        <p class="text-gray-700 dark:text-gray-300">
+          Gunakan rumus <b>sin A = a / c</b> <br>
+          sin 30° = a / 10 <br>
+          ½ = a / 10 <br>
+          a = 10 × ½ = <b>5 cm</b>
+        </p>
+      </div>
+      <p class="mt-3 text-green-600 dark:text-green-400 font-semibold">✅ Jawaban: 5 cm</p>
+    </div>
+
+    <!-- Soal 2 -->
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 mb-8 text-left border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Soal 2</h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-4">
+        Dalam segitiga siku-siku, sudut B = 45° dan sisi di depan sudut B (a) = 8 cm. Hitung panjang sisi miringnya!
+      </p>
+
+      <div class="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl">
+        <h4 class="font-semibold text-blue-700 dark:text-blue-300 mb-2">Penyelesaian:</h4>
+        <p class="text-gray-700 dark:text-gray-300">
+          Rumus: <b>sin B = a / c</b> <br>
+          sin 45° = 8 / c <br>
+          (√2 / 2) = 8 / c <br>
+          c = 8 ÷ (√2 / 2) = 8 × 2 / √2 = <b>8√2 cm</b>
+        </p>
+      </div>
+      <p class="mt-3 text-green-600 dark:text-green-400 font-semibold">✅ Jawaban: 8√2 cm</p>
+    </div>
+
+    <!-- Soal 3 -->
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 mb-8 text-left border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Soal 3</h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-4">
+        Sebuah menara memiliki tinggi 20 meter. Jika jarak pengamat dari kaki menara adalah 15 meter, tentukan sudut elevasinya!
+      </p>
+
+      <div class="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl">
+        <h4 class="font-semibold text-blue-700 dark:text-blue-300 mb-2">Penyelesaian:</h4>
+        <p class="text-gray-700 dark:text-gray-300">
+          Gunakan rumus <b>tan θ = depan / samping</b> <br>
+          tan θ = 20 / 15 = 1.333 <br>
+          θ = arctan(1.333) = <b>53.13°</b>
+        </p>
+      </div>
+      <p class="mt-3 text-green-600 dark:text-green-400 font-semibold">✅ Jawaban: 53.13°</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Download Handout -->
+<section class="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 transition-colors duration-500">
+  <div class="max-w-5xl mx-auto text-center px-6">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4">
+      Unduh Handout Pembelajaran
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto">
+      Dapatkan handout pembelajaran trigonometri dalam format PDF untuk membantu kamu memahami materi dengan lebih mudah dan efisien.
+    </p>
+
+    <!-- Card Download -->
+    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl">
+      <div class="flex items-center gap-4">
+        <div class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 p-4 rounded-full">
+          <i class='bx bxs-file-pdf text-4xl'></i>
+        </div>
+        <div class="text-left">
+          <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Handout Trigonometri</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Format: PDF • 2.3 MB</p>
+        </div>
+      </div>
+      <a href="source/materi/Handout Trigonometri - 1.pdf" download
+         class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+        <i class='bx bx-download text-xl'></i> Unduh Sekarang
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Footer Modern Elegan -->
+<!-- Tambahkan link Boxicons di bagian <head> -->
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<!-- Footer -->
+<footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-12 transition-colors duration-500">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    
+    <!-- Brand -->
+    <div class="text-center md:text-left">
+      <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-400">TrigonoLearn</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        Belajar trigonometri lebih interaktif, mudah, dan menyenangkan.
+      </p>
+    </div>
+
+    <!-- Navigasi -->
+    <nav class="flex flex-wrap justify-center gap-6 text-sm">
+      <a href="#materi" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Materi</a>
+      <a href="#video" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Video</a>
+      <a href="#latihan" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Latihan</a>
+      <a href="#kuis" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kuis</a>
+    </nav>
+
+    <!-- Sosial Media -->
+    <div class="flex space-x-4">
+      <a href="#" class="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition text-xl">
+        <i class='bx bxl-facebook'></i>
+      </a>
+      <a href="#" class="text-gray-500 hover:text-pink-500 dark:hover:text-pink-400 transition text-xl">
+        <i class='bx bxl-instagram'></i>
+      </a>
+      <a href="#" class="text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition text-xl">
+        <i class='bx bxl-youtube'></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Garis pembatas -->
+  <div class="border-t border-gray-200 dark:border-gray-700 mt-8"></div>
+
+  <!-- Copyright -->
+  <div class="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+    © 2025 <span class="font-semibold text-blue-600 dark:text-blue-400">TrigonoLearn</span>. Dibuat oleh <span class="font-semibold">Fauzan Putra</span>.
+  </div>
+</footer>
+
+
+
+
+<style>
+  .animate-fade {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(btn => {
+        btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'text-white', 'scale-105');
+        btn.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+      });
+      tab.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+      tab.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'text-white', 'scale-105');
+
+      const target = tab.dataset.tab;
+      contents.forEach(c => c.classList.add('hidden'));
+      document.getElementById(target).classList.remove('hidden');
+    });
+  });
+
+  const ratios = [
+    { title: "Sinus (sin θ)", formula: "sin θ = Sisi Depan / Sisi Miring", example: "Jika sisi depan = 3 dan sisi miring = 5, maka sin θ = 3/5 = 0.6" },
+    { title: "Cosinus (cos θ)", formula: "cos θ = Sisi Samping / Sisi Miring", example: "Jika sisi samping = 4 dan sisi miring = 5, maka cos θ = 4/5 = 0.8" },
+    { title: "Tangen (tan θ)", formula: "tan θ = Sisi Depan / Sisi Samping", example: "Jika sisi depan = 3 dan sisi samping = 4, maka tan θ = 3/4 = 0.75" },
+    { title: "Cosecan (csc θ)", formula: "csc θ = 1 / sin θ", example: "Jika sin θ = 0.6, maka csc θ = 1 / 0.6 = 1.67" },
+    { title: "Secan (sec θ)", formula: "sec θ = 1 / cos θ", example: "Jika cos θ = 0.8, maka sec θ = 1 / 0.8 = 1.25" },
+    { title: "Cotangen (cot θ)", formula: "cot θ = 1 / tan θ", example: "Jika tan θ = 0.75, maka cot θ = 1 / 0.75 = 1.33" }
+  ];
+
+  let currentIndex = 0;
+  const ratioContent = document.getElementById("ratioContent");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const progressBar = document.getElementById("progressBar");
+
+  function renderRatio() {
+    const { title, formula, example } = ratios[currentIndex];
+    ratioContent.innerHTML = `
+      <div class="text-center">
+        <h3 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-3">${title}</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-2"><b>Rumus:</b> ${formula}</p>
+        <p class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mt-4 shadow-sm">
+          💡 <b>Contoh:</b> ${example}
+        </p>
+      </div>
+    `;
+    progressBar.style.width = `${((currentIndex + 1) / ratios.length) * 100}%`;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) { currentIndex--; renderRatio(); }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentIndex < ratios.length - 1) { currentIndex++; renderRatio(); }
+  });
+
+  renderRatio();
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Trigonometri</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Konfigurasi Tailwind agar support dark mode dengan class
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-500">
+
+  <!-- Navbar -->
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 text-black dark:text-white px-4 py-2 rounded-full shadow-lg flex items-center justify-between w-[90%] md:w-[70%] lg:w-[60%] z-50 transition-all duration-300">
+
+    <!-- Left Icon -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md flex items-center justify-center">
+        <img src="source/foto/logo.png" alt="Logo LSPL HANAS" class="w-8 h-8 object-contain">
+      </div>
+    </div>
+
+    <!-- Menu Links -->
+    <ul class="hidden md:flex space-x-8 text-sm font-medium">
+      <li><a href="index.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Beranda</a></li>
+      <li><a href="materi.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Materi</a></li>
+      <li><a href="latihan.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Latihan</a></li>
+      <li><a href="games.html" class="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">Games</a></li>
+      <li><a href="informasi.html" class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400 pb-1 transition">Informasi</a></li>
+    </ul>
+
+    <!-- Bagian kanan (Dark mode + Menu mobile) -->
+    <div class="flex items-center space-x-3">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="p-2 rounded-full bg-blue-700 dark:bg-gray-600 text-white focus:outline-none transition">
+        <!-- Icon Sun (Light Mode) -->
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.07 6.07l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- Icon Moon (Dark Mode) -->
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden flex items-center focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu"
+      class="hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex flex-col items-center py-4 space-y-4 md:hidden opacity-0 translate-y-[-10px] transition-all duration-500 ease-out">
+      <a href="index.html" class="hover:text-blue-700 dark:hover:text-blue-400">Beranda</a>
+      <a href="materi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Materi</a>
+      <a href="latihan.html" class="hover:text-blue-700 dark:hover:text-blue-400">Latihan</a>
+      <a href="games.html" class="hover:text-blue-700 dark:hover:text-blue-400">Games</a>
+      <a href="informasi.html" class="hover:text-blue-700 dark:hover:text-blue-400">Informasi</a>
+    </div>
+  </nav>
+
+  <!-- Script Navbar & Dark Mode -->
+  <script>
+    // Navbar mobile toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+      if (!isOpen) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenu.classList.remove('opacity-0', 'translate-y-[-10px]');
+          mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+      } else {
+        mobileMenu.classList.add('opacity-0', 'translate-y-[-10px]');
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 400);
+      }
+      isOpen = !isOpen;
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      sunIcon.classList.toggle('hidden', !isDark);
+      moonIcon.classList.toggle('hidden', isDark);
+    });
+  </script>
+
+  <!-- Section Hero -->
+<div class="bg-gradient-to-b from-white via-blue-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+ <!-- ===== Header Title ===== -->
+  <header class="text-center py-16 px-4 pt-32">
+    <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">Informasi E-Modul Trigonometri</h1>
+    <p class="mt-4 text-gray-600 dark:text-gray-400 text-lg">Semua yang perlu kamu tahu tentang e-modul ini, panduan, pengembang, dan sumber belajar.</p>
+  </header>
+
+  <!-- ===== Section: Profil E-Modul ===== -->
+  <section class="max-w-6xl mx-auto px-6 py-16 fade-in">
+    <div class="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg">
+      <h2 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">Profil E-Modul</h2>
+      <p class="text-lg leading-relaxed">
+        E-Modul Trigonometri ini dirancang sebagai media pembelajaran interaktif untuk membantu siswa memahami konsep trigonometri secara menyeluruh. 
+        Modul ini menggabungkan teori, simulasi, latihan soal, serta mini games agar proses belajar terasa lebih menarik dan menyenangkan.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Section: Petunjuk Penggunaan ===== -->
+<!-- Boxicons CDN -->
+
+
+<section class="max-w-6xl mx-auto px-6 py-16 fade-in">
+  <div class="bg-gradient-to-r from-blue-600/10 to-blue-300/10 dark:from-blue-900/20 dark:to-blue-700/20 border border-blue-200 dark:border-blue-800 rounded-3xl p-8 shadow-lg transition-all duration-500 hover:shadow-blue-500/20">
+    
+    <!-- Judul -->
+    <div class="flex items-center gap-3 mb-8">
+      <i class='bx bx-info-circle text-4xl text-blue-600 dark:text-blue-400'></i>
+      <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400">Petunjuk Penggunaan</h2>
+    </div>
+
+    <!-- Isi utama -->
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      
+      <!-- List Petunjuk -->
+      <div class="space-y-6 text-lg">
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-blue-400/50 hover:bg-blue-500/5 transition">
+          <i class='bx bx-navigation text-3xl text-blue-600 dark:text-blue-400'></i>
+          <p>Gunakan <b>menu navigasi</b> di atas untuk berpindah halaman.</p>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-blue-400/50 hover:bg-blue-500/5 transition">
+          <i class='bx bx-book-open text-3xl text-green-600 dark:text-green-400'></i>
+          <p>Pilih <b>Materi</b> untuk memahami konsep trigonometri secara bertahap.</p>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-blue-400/50 hover:bg-blue-500/5 transition">
+          <i class='bx bx-edit-alt text-3xl text-yellow-500 dark:text-yellow-400'></i>
+          <p>Kerjakan <b>Latihan</b> untuk menguji pemahamanmu.</p>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-blue-400/50 hover:bg-blue-500/5 transition">
+          <i class='bx bx-joystick text-3xl text-purple-600 dark:text-purple-400'></i>
+          <p>Coba <b>Games</b> untuk belajar sambil bermain.</p>
+        </div>
+
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-blue-400/50 hover:bg-blue-500/5 transition">
+          <i class='bx bx-info-square text-3xl text-cyan-500 dark:text-cyan-400'></i>
+          <p>Buka <b>Informasi</b> untuk panduan lengkap dan sumber tambahan.</p>
+        </div>
+      </div>
+
+      <!-- Gambar & Overlay -->
+      <div class="relative rounded-2xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-700 group">
+        <img src="/source/foto/bg-quiz.jpg" alt="Ilustrasi Trigonometri" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition">
+          <p class="text-white text-sm md:text-base">Pelajari trigonometri dengan cara yang lebih menyenangkan dan interaktif!</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- ===== Section: Tentang Pengembang ===== -->
+  <section class="max-w-6xl mx-auto px-6 py-16 fade-in">
+    <div class="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg">
+      <h2 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">Tentang Pengembang</h2>
+      <p class="text-lg mb-4">
+        E-Modul ini dikembangkan oleh tim pengembang pendidikan digital yang berfokus pada inovasi pembelajaran interaktif. Kami berkomitmen menghadirkan pengalaman belajar yang menyenangkan dan mudah diakses oleh semua siswa.
+      </p>
+      <p>Hubungi kami di: 
+        <a href="mailto:support@emodultrigonometri.id" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">support@emodultrigonometri.id</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Section: Referensi ===== -->
+  <section class="max-w-6xl mx-auto px-6 py-16 fade-in">
+    <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg">
+      <h2 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">Referensi</h2>
+      <ul class="space-y-3 text-lg">
+        <li>📖 Rosen, K. H. (2012). <i>Elementary Trigonometry</i>. Pearson Education.</li>
+        <li>📘 Purcell, E. J., Varberg, D. (2010). <i>Calculus and Analytic Geometry</i>. Prentice Hall.</li>
+        <li>📗 Modul Trigonometri SMA Kemdikbud (2023).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Section: FAQ ===== -->
+  <section class="max-w-6xl mx-auto px-6 py-16 fade-in">
+    <div class="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg">
+      <h2 class="text-3xl font-bold mb-6 text-blue-600 dark:text-blue-400">FAQ (Pertanyaan Umum)</h2>
+      <div id="faq" class="space-y-4">
+
+        <!-- FAQ Item -->
+        <div class="rounded-2xl border border-gray-300 dark:border-gray-700 overflow-hidden">
+          <button class="faq-btn w-full flex justify-between items-center p-5 text-left text-lg font-semibold bg-gradient-to-r from-blue-500/10 to-transparent hover:from-blue-600/20 transition">
+            Bagaimana cara mengakses materi trigonometri?
+            <span class="text-2xl font-bold">+</span>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden px-6 transition-all duration-500">
+            <p class="py-4 text-gray-700 dark:text-gray-300">
+              Kamu dapat mengakses materi dengan memilih menu <b>Materi</b> di navigasi atas. Semua topik tersusun dari dasar hingga lanjutan untuk membantu kamu belajar bertahap.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-gray-300 dark:border-gray-700 overflow-hidden">
+          <button class="faq-btn w-full flex justify-between items-center p-5 text-left text-lg font-semibold bg-gradient-to-r from-blue-500/10 to-transparent hover:from-blue-600/20 transition">
+            Apakah saya bisa mengulang latihan?
+            <span class="text-2xl font-bold">+</span>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden px-6 transition-all duration-500">
+            <p class="py-4 text-gray-700 dark:text-gray-300">
+              Ya, kamu dapat mengulang latihan sesering yang kamu mau. Setiap kali kamu mengulang, soal akan diacak untuk meningkatkan pemahamanmu.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-gray-300 dark:border-gray-700 overflow-hidden">
+          <button class="faq-btn w-full flex justify-between items-center p-5 text-left text-lg font-semibold bg-gradient-to-r from-blue-500/10 to-transparent hover:from-blue-600/20 transition">
+            Apakah e-modul ini bisa diakses offline?
+            <span class="text-2xl font-bold">+</span>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden px-6 transition-all duration-500">
+            <p class="py-4 text-gray-700 dark:text-gray-300">
+              Saat ini e-modul hanya tersedia secara online untuk mendukung fitur interaktif dan update materi terbaru.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Section: Kritik & Saran ===== -->
+<section id="feedback" class="max-w-6xl mx-auto px-6 py-20 fade-in">
+  <div class="relative overflow-hidden rounded-3xl bg-white/70 dark:bg-gray-900/50 backdrop-blur-md border border-gray-300/30 dark:border-gray-700/40 shadow-2xl">
+    
+    <!-- gradient accent background -->
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-500/10 to-pink-500/10 dark:from-blue-800/20 dark:via-purple-700/20 dark:to-pink-700/20"></div>
+    
+    <div class="relative p-10 z-10">
+      <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Kritik & Saran
+      </h2>
+      <p class="text-lg text-gray-700 dark:text-gray-300 mb-8 max-w-2xl">
+        Kami sangat menghargai masukanmu untuk mengembangkan e-modul ini agar menjadi lebih baik dan interaktif.
+      </p>
+
+      <form action="mailto:fznptr15@gmail.com" method="POST" enctype="text/plain" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          
+          <!-- Input Nama -->
+          <div class="relative">
+            <input type="text" id="nama" name="Nama" required
+              class="peer w-full px-4 pt-6 pb-2 rounded-xl bg-transparent border border-gray-400/50 dark:border-gray-600 focus:border-blue-500 outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300" />
+            <label for="nama"
+              class="absolute left-4 top-3 text-gray-500 dark:text-gray-400 text-sm peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-500 transition-all">
+              Nama Lengkap
+            </label>
+          </div>
+
+          <!-- Input Email -->
+          <div class="relative">
+            <input type="email" id="email" name="Email" required
+              class="peer w-full px-4 pt-6 pb-2 rounded-xl bg-transparent border border-gray-400/50 dark:border-gray-600 focus:border-blue-500 outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300" />
+            <label for="email"
+              class="absolute left-4 top-3 text-gray-500 dark:text-gray-400 text-sm peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-500 transition-all">
+              Email Aktif
+            </label>
+          </div>
+        </div>
+
+        <!-- Textarea Pesan -->
+        <div class="relative">
+          <textarea id="pesan" name="Pesan" rows="5" required
+            class="peer w-full px-4 pt-6 pb-2 rounded-xl bg-transparent border border-gray-400/50 dark:border-gray-600 focus:border-blue-500 outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"></textarea>
+          <label for="pesan"
+            class="absolute left-4 top-3 text-gray-500 dark:text-gray-400 text-sm peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-500 transition-all">
+            Tulis kritik atau saran kamu...
+          </label>
+        </div>
+
+        <!-- Tombol -->
+        <button type="submit"
+          class="relative overflow-hidden group px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold tracking-wide transition-all duration-300 hover:bg-blue-700">
+          <span class="relative z-10">Kirim Masukan</span>
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm">
+          </div>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<footer class="mt-20 bg-gradient-to-r from-blue-600/10 to-blue-300/10 dark:from-blue-900/20 dark:to-blue-700/20 border-t border-blue-200/30 dark:border-blue-800/50">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    
+    <!-- Grid Utama -->
+    <div class="grid md:grid-cols-3 gap-10">
+      
+      <!-- Kolom 1 -->
+      <div>
+        <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+          <i class='bx bx-math text-3xl'></i> E-Modul Trigonometri
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+          Media pembelajaran interaktif untuk memahami konsep trigonometri dengan cara yang menyenangkan dan mudah.
+        </p>
+      </div>
+
+      <!-- Kolom 2 -->
+      <div>
+        <h4 class="text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">Navigasi Cepat</h4>
+        <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+          <li><a href="#home" class="hover:text-blue-500 transition flex items-center gap-2"><i class='bx bx-home-alt'></i> Beranda</a></li>
+          <li><a href="#materi" class="hover:text-blue-500 transition flex items-center gap-2"><i class='bx bx-book'></i> Materi</a></li>
+          <li><a href="#latihan" class="hover:text-blue-500 transition flex items-center gap-2"><i class='bx bx-edit-alt'></i> Latihan</a></li>
+          <li><a href="#games" class="hover:text-blue-500 transition flex items-center gap-2"><i class='bx bx-joystick'></i> Games</a></li>
+          <li><a href="#informasi" class="hover:text-blue-500 transition flex items-center gap-2"><i class='bx bx-info-circle'></i> Informasi</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3 -->
+      <div>
+        <h4 class="text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">Hubungi Kami</h4>
+        <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+          <li class="flex items-center gap-3">
+            <i class='bx bx-envelope text-2xl text-blue-500'></i>
+            <a href="mailto:fznptr15@gmail.com" class="hover:text-blue-500 transition">fznptr15@gmail.com</a>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class='bx bx-map text-2xl text-blue-500'></i>
+            <span>Yogyakarta, Indonesia</span>
+          </li>
+        </ul>
+
+        <!-- Ikon Sosial -->
+        <div class="flex gap-4 mt-6">
+          <a href="#" class="text-gray-500 hover:text-blue-500 text-2xl transition"><i class='bx bxl-facebook'></i></a>
+          <a href="#" class="text-gray-500 hover:text-blue-500 text-2xl transition"><i class='bx bxl-instagram'></i></a>
+          <a href="#" class="text-gray-500 hover:text-blue-500 text-2xl transition"><i class='bx bxl-github'></i></a>
+          <a href="#" class="text-gray-500 hover:text-blue-500 text-2xl transition"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Garis Pembatas -->
+    <div class="border-t border-blue-200/30 dark:border-blue-800/50 my-8"></div>
+
+    <!-- Copyright -->
+    <div class="text-center text-gray-500 dark:text-gray-400 text-sm">
+      © 2025 <span class="text-blue-500 font-semibold">E-Modul Trigonometri</span>. Semua hak dilindungi.
+    </div>
+  </div>
+</footer>
+
+</div>
+ 
+
+  <!-- ===== JS: FAQ Accordion + Scroll Animation ===== -->
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll(".faq-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector("span");
+
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.textContent = "+";
+        } else {
+          document.querySelectorAll(".faq-content").forEach(c => c.style.maxHeight = null);
+          document.querySelectorAll(".faq-btn span").forEach(i => i.textContent = "+");
+          content.style.maxHeight = content.scrollHeight + "px";
+          icon.textContent = "−";
+        }
+      });
+    });
+
+    // Scroll fade-in animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("show");
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+  </script>
+
+
+</body>
+</html>
