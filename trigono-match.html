@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigono Match Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .draggable {
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        
+        .draggable:active {
+            cursor: grabbing;
+            transform: rotate(5deg) scale(1.05);
+        }
+        
+        .dragging {
+            opacity: 0.7;
+            transform: rotate(5deg) scale(1.05);
+            z-index: 1000;
+        }
+        
+        .drop-zone {
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        
+        .dark .drop-zone.drag-over {
+            background-color: #1e3a8a;
+            border-color: #60a5fa;
+        }
+        
+        .matched {
+            animation: matchSuccess 0.6s ease;
+            background-color: #dcfce7 !important;
+            border-color: #16a34a !important;
+        }
+        
+        .wrong-match {
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes matchSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background-color: #bbf7d0; }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes rotatePlanet {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateRing {
+            0% { transform: translate(-50%, -50%) rotate(12deg); }
+            100% { transform: translate(-50%, -50%) rotate(372deg); }
+        }
+        
+        .planet-rotate {
+            animation: rotatePlanet 20s linear infinite;
+        }
+        
+        .ring-rotate {
+            animation: rotateRing 15s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 min-h-full font-sans transition-colors duration-300">
+    <!-- Dark Mode Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <button onclick="toggleDarkMode()" class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+            <span id="darkModeIcon">🌙</span>
+        </button>
+    </div>
+
+    <div id="gameContainer" class="min-h-full p-4">
+        <!-- Menu Utama -->
+        <div id="mainMenu" class="fixed inset-0 flex items-center justify-center overflow-hidden">
+            <!-- Space Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-blue-900 to-purple-900"></div>
+            
+            <!-- Stars -->
+            <div class="absolute top-10 left-10 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+            <div class="absolute top-20 right-32 w-1 h-1 bg-blue-200 rounded-full animate-pulse delay-300"></div>
+            <div class="absolute top-32 left-1/4 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-700"></div>
+            <div class="absolute top-40 right-20 w-0.5 h-0.5 bg-blue-100 rounded-full animate-pulse delay-1000"></div>
+            <div class="absolute bottom-32 left-20 w-1 h-1 bg-white rounded-full animate-pulse delay-500"></div>
+            <div class="absolute bottom-20 right-1/4 w-0.5 h-0.5 bg-blue-200 rounded-full animate-pulse delay-200"></div>
+            <div class="absolute top-1/2 left-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-800"></div>
+            <div class="absolute top-1/3 right-16 w-1 h-1 bg-blue-100 rounded-full animate-pulse delay-400"></div>
+            
+            <!-- Planets -->
+            <div class="absolute top-16 right-16 w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-60 planet-rotate">
+                <div class="absolute top-2 left-2 w-4 h-4 bg-blue-300/50 rounded-full"></div>
+                <div class="absolute bottom-3 right-3 w-2 h-2 bg-blue-200/30 rounded-full"></div>
+            </div>
+            
+            <div class="absolute bottom-20 left-16 w-16 h-16 bg-gradient-to-br from-purple-400 to-indigo-600 rounded-full opacity-50 planet-rotate">
+                <div class="absolute top-1 right-2 w-2 h-2 bg-purple-200/40 rounded-full"></div>
+            </div>
+            
+            <div class="absolute top-1/3 left-8 w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full opacity-40 planet-rotate">
+                <div class="absolute bottom-1 left-1 w-1.5 h-1.5 bg-cyan-200/50 rounded-full"></div>
+            </div>
+            
+            <!-- Saturn-like planet with ring -->
+            <div class="absolute bottom-1/4 right-12 w-20 h-20 opacity-50">
+                <div class="relative w-full h-full bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full planet-rotate">
+                    <div class="absolute top-2 left-3 w-3 h-3 bg-yellow-200/40 rounded-full"></div>
+                    <div class="absolute bottom-2 right-2 w-2 h-2 bg-orange-200/30 rounded-full"></div>
+                </div>
+                <div class="absolute top-1/2 left-1/2 w-28 h-1 bg-gradient-to-r from-transparent via-yellow-200/30 to-transparent rounded-full ring-rotate"></div>
+            </div>
+            
+            <!-- Nebula effects -->
+            <div class="absolute top-1/4 left-1/3 w-40 h-40 bg-gradient-to-br from-purple-500/10 to-blue-600/10 rounded-full blur-2xl animate-pulse delay-600"></div>
+            <div class="absolute bottom-1/3 right-1/3 w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-indigo-500/10 rounded-full blur-xl animate-pulse delay-900"></div>
+            
+            <div class="relative max-w-lg mx-auto text-center z-10 px-6">
+                <!-- Main Card -->
+                <div class="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 md:p-12 fade-in">
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <!-- Icon -->
+                        <div class="mb-6">
+                            <div class="relative w-20 h-20 mx-auto">
+                                <!-- Main planet -->
+                                <div class="w-full h-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 rounded-full shadow-2xl planet-rotate">
+                                    <!-- Planet surface details -->
+                                    <div class="absolute top-3 left-4 w-3 h-3 bg-blue-300/60 rounded-full"></div>
+                                    <div class="absolute top-6 right-3 w-2 h-2 bg-blue-200/40 rounded-full"></div>
+                                    <div class="absolute bottom-4 left-3 w-1.5 h-1.5 bg-blue-100/50 rounded-full"></div>
+                                    <div class="absolute bottom-6 right-5 w-2.5 h-2.5 bg-blue-300/30 rounded-full"></div>
+                                    <!-- Atmosphere glow -->
+                                    <div class="absolute inset-0 bg-blue-300/20 rounded-full blur-sm"></div>
+                                </div>
+                                <!-- Orbital ring -->
+                                <div class="absolute top-1/2 left-1/2 w-28 h-1 bg-gradient-to-r from-transparent via-blue-200/40 to-transparent rounded-full ring-rotate"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Title -->
+                        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 dark:from-blue-400 dark:via-blue-500 dark:to-blue-300 bg-clip-text text-transparent mb-4">
+                            Trigono Match
+                        </h1>
+                        
+                        <!-- Subtitle -->
+                        <p class="text-gray-600 dark:text-gray-300 mb-8 text-lg leading-relaxed">
+                            Drag soal segitiga siku-siku ke jawaban yang tepat!
+                        </p>
+                        
+                        <!-- Button -->
+                        <button onclick="startGame()" class="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-10 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform">
+                            <span class="relative z-10">Mulai Bermain</span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        </button>
+                        
+                        <!-- Features -->
+                        <div class="mt-8 flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                                <span>8 Soal</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                <span>3 Menit</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                                <span>Drag & Drop</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Area Game -->
+        <div id="gameArea" class="hidden max-w-6xl mx-auto">
+            <header class="text-center mb-4 md:mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-800 dark:text-blue-300 mb-2">Trigono Match</h2>
+                <div class="flex justify-center gap-4 md:gap-8 text-blue-600 dark:text-blue-400 mb-4 text-sm md:text-base">
+                    <div>Skor: <span id="score" class="font-bold">0</span></div>
+                    <div>Waktu: <span id="timer" class="font-bold">60</span>s</div>
+                </div>
+                <p class="text-blue-500 dark:text-blue-400 text-xs md:text-sm px-4">Drag soal dari kiri ke jawaban yang tepat di kanan</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-6">
+                <!-- Kolom Soal -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-lg">
+                    <h3 class="text-lg md:text-xl font-bold text-blue-800 dark:text-blue-300 mb-4 text-center">Soal Segitiga Siku-Siku</h3>
+                    <div id="questionsList" class="space-y-3">
+                        <!-- Soal akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Kolom Jawaban -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-lg">
+                    <h3 class="text-lg md:text-xl font-bold text-blue-800 dark:text-blue-300 mb-4 text-center">Jawaban</h3>
+                    <div id="answersList" class="space-y-3">
+                        <!-- Jawaban akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700 text-white font-semibold py-2 px-4 md:px-6 rounded-xl transition-colors text-sm md:text-base">
+                    Kembali ke Menu
+                </button>
+            </div>
+        </div>
+
+        <!-- Hasil Game -->
+        <div id="gameResult" class="hidden fixed inset-0 flex items-center justify-center overflow-hidden">
+            <!-- Space Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-blue-900 to-purple-900"></div>
+            
+            <!-- Stars -->
+            <div class="absolute top-10 left-10 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+            <div class="absolute top-20 right-32 w-1 h-1 bg-blue-200 rounded-full animate-pulse delay-300"></div>
+            <div class="absolute top-32 left-1/4 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-700"></div>
+            <div class="absolute top-40 right-20 w-0.5 h-0.5 bg-blue-100 rounded-full animate-pulse delay-1000"></div>
+            <div class="absolute bottom-32 left-20 w-1 h-1 bg-white rounded-full animate-pulse delay-500"></div>
+            <div class="absolute bottom-20 right-1/4 w-0.5 h-0.5 bg-blue-200 rounded-full animate-pulse delay-200"></div>
+            <div class="absolute top-1/2 left-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-800"></div>
+            <div class="absolute top-1/3 right-16 w-1 h-1 bg-blue-100 rounded-full animate-pulse delay-400"></div>
+            
+            <!-- Result Planets -->
+            <div class="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full opacity-40 planet-rotate">
+                <div class="absolute top-3 left-4 w-4 h-4 bg-green-300/50 rounded-full"></div>
+                <div class="absolute bottom-4 right-3 w-2 h-2 bg-emerald-200/40 rounded-full"></div>
+            </div>
+            
+            <div class="absolute bottom-24 right-24 w-28 h-28 bg-gradient-to-br from-purple-400 to-violet-600 rounded-full opacity-50 planet-rotate">
+                <div class="absolute top-2 right-3 w-3 h-3 bg-purple-200/50 rounded-full"></div>
+                <div class="absolute bottom-3 left-2 w-2 h-2 bg-violet-200/40 rounded-full"></div>
+            </div>
+            
+            <div class="absolute top-1/4 right-16 w-20 h-20 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full opacity-35 planet-rotate">
+                <div class="absolute top-1 left-2 w-2 h-2 bg-cyan-200/50 rounded-full"></div>
+            </div>
+            
+            <!-- Trophy Planet -->
+            <div class="absolute top-16 left-1/2 transform -translate-x-1/2 w-24 h-24 opacity-60">
+                <div class="relative w-full h-full bg-gradient-to-br from-yellow-300 to-amber-500 rounded-full planet-rotate">
+                    <div class="absolute top-2 left-3 w-3 h-3 bg-yellow-200/60 rounded-full"></div>
+                    <div class="absolute bottom-3 right-2 w-2 h-2 bg-amber-200/50 rounded-full"></div>
+                    <div class="absolute inset-0 bg-yellow-300/30 rounded-full blur-sm"></div>
+                </div>
+                <div class="absolute top-1/2 left-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-yellow-200/50 to-transparent rounded-full ring-rotate"></div>
+            </div>
+            
+            <!-- Nebula effects -->
+            <div class="absolute top-1/3 left-1/4 w-48 h-48 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-600"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-40 h-40 bg-gradient-to-br from-cyan-400/10 to-indigo-500/10 rounded-full blur-2xl animate-pulse delay-900"></div>
+            
+            <div class="relative max-w-2xl mx-auto text-center z-10 px-6">
+                <!-- Main Result Card -->
+                <div class="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/50 p-8 md:p-12 fade-in">
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <!-- Trophy Icon -->
+                        <div class="mb-6">
+                            <div class="relative w-24 h-24 mx-auto">
+                                <!-- Trophy Planet -->
+                                <div class="w-full h-full bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-600 rounded-full shadow-2xl planet-rotate">
+                                    <!-- Trophy surface details -->
+                                    <div class="absolute top-4 left-5 w-3 h-3 bg-yellow-300/70 rounded-full"></div>
+                                    <div class="absolute top-7 right-4 w-2 h-2 bg-amber-200/50 rounded-full"></div>
+                                    <div class="absolute bottom-5 left-4 w-2 h-2 bg-orange-200/60 rounded-full"></div>
+                                    <div class="absolute bottom-7 right-6 w-3 h-3 bg-yellow-200/40 rounded-full"></div>
+                                    <!-- Glow effect -->
+                                    <div class="absolute inset-0 bg-yellow-300/30 rounded-full blur-sm"></div>
+                                </div>
+                                <!-- Victory ring -->
+                                <div class="absolute top-1/2 left-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-yellow-300/60 to-transparent rounded-full ring-rotate"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Title -->
+                        <h2 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-yellow-500 via-amber-600 to-orange-600 dark:from-yellow-400 dark:via-amber-500 dark:to-orange-400 bg-clip-text text-transparent mb-6">
+                            Misi Selesai!
+                        </h2>
+                        
+                        <!-- Score Display -->
+                        <div class="mb-6">
+                            <p class="text-lg md:text-xl text-blue-600 dark:text-blue-400 mb-2">Skor Galaksi:</p>
+                            <div class="relative">
+                                <p id="finalScore" class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700 dark:from-blue-400 dark:via-cyan-400 dark:to-blue-300 bg-clip-text text-transparent mb-4">0</p>
+                                <!-- Score glow effect -->
+                                <div class="absolute inset-0 bg-blue-400/20 blur-xl rounded-full"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message -->
+                        <p id="resultMessage" class="text-blue-600 dark:text-blue-400 mb-8 text-base md:text-lg leading-relaxed"></p>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <!-- Play Again Button -->
+                            <button onclick="startGame()" class="group relative bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform">
+                                <span class="relative z-10 flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                                    </svg>
+                                    Jelajahi Lagi
+                                </span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-emerald-300 to-teal-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                            </button>
+                            
+                            <!-- Back to Menu Button -->
+                            <a href="games.html" class="group relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform">
+                                <span class="relative z-10 flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                    </svg>
+                                    Stasiun Utama
+                                </span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-indigo-300 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                            </a>
+                        </div>
+                        
+                        <!-- Achievement Stars -->
+                        <div class="mt-8 flex justify-center gap-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                                <span>Penjelajah Trigono</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-300"></span>
+                                <span>Navigator Matematika</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gameData = [
+            { question: "Sudut θ = 30°, sisi depan = 10 cm. Berapa sisi miring?", answer: "20 cm" },
+            { question: "Sudut θ = 60°, sisi samping = 5 cm. Berapa sisi miring?", answer: "10 cm" },
+            { question: "Sisi depan = 3 cm, sisi miring = 5 cm. Berapa sin θ?", answer: "3/5" },
+            { question: "Sudut θ = 45°, sisi miring = 14 cm. Berapa sisi depan?", answer: "7√2 cm" },
+            { question: "Sisi samping = 8 cm, sisi depan = 6 cm. Berapa tan θ?", answer: "3/4" },
+            { question: "Sudut θ = 30°, sisi miring = 12 cm. Berapa sisi samping?", answer: "6√3 cm" },
+            { question: "Sisi depan = 15 cm, sisi samping = 20 cm. Berapa sisi miring?", answer: "25 cm" },
+            { question: "Sudut θ = 60°, sisi depan = 9 cm. Berapa sisi samping?", answer: "3√3 cm" }
+        ];
+
+        let matchedPairs = 0;
+        let score = 0;
+        let timeLeft = 180;
+        let gameTimer;
+        let gameActive = false;
+        let draggedElement = null;
+
+        function showMenu() {
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('gameArea').classList.add('hidden');
+            document.getElementById('gameResult').classList.add('hidden');
+            resetGame();
+        }
+
+        function startGame() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('gameArea').classList.remove('hidden');
+            document.getElementById('gameResult').classList.add('hidden');
+            
+            resetGame();
+            createGameElements();
+            startTimer();
+            gameActive = true;
+        }
+
+        function resetGame() {
+            clearInterval(gameTimer);
+            matchedPairs = 0;
+            score = 0;
+            timeLeft = 180;
+            gameActive = false;
+            draggedElement = null;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('timer').textContent = '180';
+        }
+
+        function createGameElements() {
+            const questionsList = document.getElementById('questionsList');
+            const answersList = document.getElementById('answersList');
+            
+            questionsList.innerHTML = '';
+            answersList.innerHTML = '';
+            
+            // Acak data game
+            const shuffledData = [...gameData].sort(() => Math.random() - 0.5);
+            const shuffledAnswers = shuffledData.map(item => item.answer).sort(() => Math.random() - 0.5);
+            
+            // Buat elemen soal
+            shuffledData.forEach((item, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'draggable bg-blue-100 dark:bg-blue-900 border-2 border-blue-300 dark:border-blue-600 rounded-xl p-3 md:p-4 text-center font-semibold text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors text-sm md:text-base';
+                questionElement.draggable = true;
+                questionElement.textContent = item.question;
+                questionElement.dataset.answer = item.answer;
+                questionElement.dataset.questionId = index;
+                
+                questionElement.addEventListener('dragstart', handleDragStart);
+                questionElement.addEventListener('dragend', handleDragEnd);
+                
+                questionsList.appendChild(questionElement);
+            });
+            
+            // Buat elemen jawaban
+            shuffledAnswers.forEach((answer, index) => {
+                const answerElement = document.createElement('div');
+                answerElement.className = 'drop-zone bg-gray-50 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl p-3 md:p-4 text-center font-semibold text-gray-600 dark:text-gray-300 min-h-16 flex items-center justify-center text-sm md:text-base';
+                answerElement.dataset.answer = answer;
+                answerElement.dataset.answerId = index;
+                answerElement.innerHTML = `<span class="pulse">${answer}</span>`;
+                
+                answerElement.addEventListener('dragover', handleDragOver);
+                answerElement.addEventListener('drop', handleDrop);
+                answerElement.addEventListener('dragleave', handleDragLeave);
+                
+                answersList.appendChild(answerElement);
+            });
+        }
+
+        function handleDragStart(e) {
+            if (!gameActive) return;
+            
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', e.target.outerHTML);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            e.target.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.target.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.target.classList.remove('drag-over');
+            
+            if (!gameActive || !draggedElement) return;
+            
+            const dropZone = e.target.closest('.drop-zone');
+            const questionAnswer = draggedElement.dataset.answer;
+            const dropAnswer = dropZone.dataset.answer;
+            
+            if (questionAnswer === dropAnswer) {
+                // Jawaban benar!
+                dropZone.classList.add('matched');
+                dropZone.innerHTML = `<span class="text-green-700 font-bold">${draggedElement.textContent} = ${dropAnswer}</span>`;
+                
+                draggedElement.style.opacity = '0.3';
+                draggedElement.style.pointerEvents = 'none';
+                draggedElement.draggable = false;
+                
+                matchedPairs++;
+                score += 100;
+                document.getElementById('score').textContent = score;
+                
+                if (matchedPairs === gameData.length) {
+                    endGame(true);
+                }
+            } else {
+                // Jawaban salah
+                dropZone.classList.add('wrong-match');
+                setTimeout(() => {
+                    dropZone.classList.remove('wrong-match');
+                }, 500);
+                
+                score = Math.max(0, score - 10);
+                document.getElementById('score').textContent = score;
+            }
+            
+            draggedElement = null;
+        }
+
+        function startTimer() {
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        function endGame(won) {
+            gameActive = false;
+            clearInterval(gameTimer);
+            
+            if (won) {
+                score += timeLeft * 10; // Bonus waktu
+            }
+            
+            document.getElementById('finalScore').textContent = score;
+            
+            let message = '';
+            if (won) {
+                message = `Selamat! Anda menyelesaikan semua soal dalam ${180 - timeLeft} detik!`;
+            } else {
+                message = `Waktu habis! Anda berhasil mencocokkan ${matchedPairs} dari ${gameData.length} soal.`;
+            }
+            document.getElementById('resultMessage').textContent = message;
+            
+            setTimeout(() => {
+                document.getElementById('gameArea').classList.add('hidden');
+                document.getElementById('gameResult').classList.remove('hidden');
+            }, 1000);
+        }
+
+        // Dark Mode Functions
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('darkModeIcon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.textContent = '🌙';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                html.classList.add('dark');
+                icon.textContent = '☀️';
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        function initDarkMode() {
+            const savedMode = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const icon = document.getElementById('darkModeIcon');
+            
+            if (savedMode === 'true' || (savedMode === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+
+        // Inisialisasi
+        initDarkMode();
+        showMenu();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9940a2a3d42e45e2',t:'MTc2MTM4Mzk5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

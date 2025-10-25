@@ -10,171 +10,81 @@
 
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-500">
 
-<section class="max-w-7xl mx-auto px-6 py-16">
-  <!-- SUB MENU -->
-  <div class="flex flex-wrap justify-center gap-4 mb-12">
-    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg scale-105 transition-all duration-200" data-tab="pengantar">
-      <span>Pengantar</span>
-    </button>
-    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="identifikasi">
-      <span>Identifikasi Sisi</span>
-    </button>
-    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="rasio">
-      <span>Rasio Trigonometri</span>
-    </button>
-    <button class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-semibold shadow-md hover:scale-105 transition-all duration-200" data-tab="sudut">
-      <span>Sudut Istimewa</span>
-    </button>
-  </div>
 
-  <!-- KONTEN -->
-  <div id="tab-content" class="space-y-8">
-    <!-- BOX 1 -->
-    <div id="pengantar" class="tab-content animate-fade">
-      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
-        <div class="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-4">Apa Itu Trigonometri?</h2>
-            <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed text-justify">
-              Trigonometri adalah cabang matematika yang mempelajari hubungan antara <b>sisi dan sudut</b> pada segitiga. 
-              Konsep ini sangat penting dalam <b>fisika, teknik, arsitektur,</b> dan <b>astronomi</b>. 
-              Dengan trigonometri, kita dapat menghitung jarak, tinggi, atau sudut tanpa mengukurnya secara langsung.
-            </p>
-          </div>
-          <img src="https://cdn.pixabay.com/photo/2017/08/30/07/54/math-2692109_1280.jpg" class="rounded-2xl shadow-xl border border-gray-300 dark:border-gray-700 transform hover:scale-105 transition duration-300" alt="Ilustrasi Trigonometri">
-        </div>
-      </div>
+
+
+<section id="peta-konsep" class="min-h-screen py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-500">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-700 dark:text-blue-300 mb-10 tracking-tight">
+      Peta Konsep Trigonometri
+    </h2>
+
+    <!-- Garis dekorasi -->
+    <div class="flex justify-center mb-14">
+      <div class="w-28 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 rounded-full animate-pulse"></div>
     </div>
 
-    <!-- BOX 2 -->
-    <div id="identifikasi" class="tab-content hidden animate-fade">
-      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
-        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Identifikasi Sisi Segitiga Siku-Siku</h2>
-        <div class="grid md:grid-cols-2 gap-10 mt-8 items-center">
-          <img src="https://cdn.pixabay.com/photo/2016/03/26/22/34/geometry-1281607_960_720.jpg" class="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 w-full md:w-80 mx-auto" alt="Segitiga Siku-siku">
-          <div class="space-y-5 text-lg">
-            <p><b>Sisi Miring:</b> sisi terpanjang yang berseberangan dengan sudut siku-siku.</p>
-            <p><b>Sisi Depan:</b> sisi di depan sudut θ.</p>
-            <p><b>Sisi Samping:</b> sisi yang berdekatan dengan sudut θ.</p>
-          </div>
+    <!-- GRID UTAMA -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-center gap-10 md:gap-8 relative">
+
+      <!-- Konsep Dasar -->
+      <div class="bg-white/70 dark:bg-gray-900/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 
+                  rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 md:w-1/5">
+        <div class="p-8">
+          <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">Konsep Dasar</h3>
         </div>
       </div>
+
+      <!-- Panah -->
+      <i class='bx bx-chevron-right text-5xl text-blue-500 dark:text-blue-400 hidden md:block animate-pulse'></i>
+      <i class='bx bx-chevron-down text-5xl text-blue-500 dark:text-blue-400 md:hidden animate-pulse'></i>
+
+      <!-- Rasio -->
+      <div class="bg-white/70 dark:bg-gray-900/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 
+                  rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 md:w-1/5">
+        <div class="p-8">
+          <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">Rasio Trigonometri</h3>
+        </div>
+      </div>
+
+      <!-- Panah -->
+      <i class='bx bx-chevron-right text-5xl text-blue-500 dark:text-blue-400 hidden md:block animate-pulse'></i>
+      <i class='bx bx-chevron-down text-5xl text-blue-500 dark:text-blue-400 md:hidden animate-pulse'></i>
+
+      <!-- Rumus -->
+      <div class="bg-white/70 dark:bg-gray-900/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 
+                  rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 md:w-1/5">
+        <div class="p-8">
+          <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">Rumus dan Identitas</h3>
+        </div>
+      </div>
+
+      <!-- Panah -->
+      <i class='bx bx-chevron-right text-5xl text-blue-500 dark:text-blue-400 hidden md:block animate-pulse'></i>
+      <i class='bx bx-chevron-down text-5xl text-blue-500 dark:text-blue-400 md:hidden animate-pulse'></i>
+
+      <!-- Aplikasi -->
+      <div class="bg-white/70 dark:bg-gray-900/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 
+                  rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 md:w-1/5">
+        <div class="p-8">
+          <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">Aplikasi Trigonometri</h3>
+        </div>
+      </div>
+
     </div>
 
-    <!-- BOX 3 -->
-    <div id="rasio" class="tab-content hidden animate-fade">
-      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition relative overflow-hidden">
-        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Rasio Trigonometri</h2>
-        <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full my-6">
-          <div id="progressBar" class="h-2 bg-gradient-to-r from-blue-400 to-indigo-600 rounded-full transition-all duration-500"></div>
-        </div>
-        <div id="ratioContent" class="transition-all duration-500 ease-in-out mt-6 text-center"></div>
-        <div class="flex justify-between mt-10">
-          <button id="prevBtn" class="px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold shadow-md hover:scale-105 transition flex items-center gap-2">
-            <i class='bx bx-chevron-left text-2xl'></i> Sebelumnya
-          </button>
-          <button id="nextBtn" class="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-semibold shadow-md hover:scale-105 transition flex items-center gap-2">
-            Selanjutnya <i class='bx bx-chevron-right text-2xl'></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOX 4 -->
-    <div id="sudut" class="tab-content hidden animate-fade">
-      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-xl transition">
-        <h2 class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 text-center mb-6">Sudut Istimewa Trigonometri</h2>
-        <p class="text-lg text-center mb-6 text-gray-700 dark:text-gray-300">Sudut istimewa adalah sudut yang memiliki nilai perbandingan trigonometri yang mudah diingat dan sering digunakan.</p>
-        <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-          <table class="w-full text-center">
-            <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-              <tr>
-                <th class="py-3 px-4">Sudut (°)</th>
-                <th>sin θ</th><th>cos θ</th><th>tan θ</th><th>csc θ</th><th>sec θ</th><th>cot θ</th>
-              </tr>
-            </thead>
-            <tbody class="bg-gray-50 dark:bg-gray-900 dark:text-gray-300">
-              <tr><td>0°</td><td>0</td><td>1</td><td>0</td><td>-</td><td>1</td><td>-</td></tr>
-              <tr><td>30°</td><td>1/2</td><td>√3/2</td><td>1/√3</td><td>2</td><td>2/√3</td><td>√3</td></tr>
-              <tr><td>45°</td><td>√2/2</td><td>√2/2</td><td>1</td><td>√2</td><td>√2</td><td>1</td></tr>
-              <tr><td>60°</td><td>√3/2</td><td>1/2</td><td>√3</td><td>2/√3</td><td>2</td><td>1/√3</td></tr>
-              <tr><td>90°</td><td>1</td><td>0</td><td>-</td><td>1</td><td>-</td><td>0</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <!-- Lanjut -->
+    <div class="text-center mt-16">
+      <p class="text-gray-700 dark:text-gray-300 mb-2 text-sm md:text-base">Lanjut ke Penyajian Materi</p>
+      <a href="#materi" class="inline-block hover:scale-110 transition-transform duration-300 animate-bounce">
+        <i class='bx bx-chevron-down text-4xl md:text-5xl text-blue-600 dark:text-blue-400'></i>
+      </a>
     </div>
   </div>
 </section>
 
-<style>
-  .animate-fade {
-    animation: fadeIn 0.6s ease-in-out;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
 
-<script>
-  const tabs = document.querySelectorAll('.tab-btn');
-  const contents = document.querySelectorAll('.tab-content');
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(btn => {
-        btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'text-white', 'scale-105');
-        btn.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
-      });
-      tab.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
-      tab.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'text-white', 'scale-105');
-
-      const target = tab.dataset.tab;
-      contents.forEach(c => c.classList.add('hidden'));
-      document.getElementById(target).classList.remove('hidden');
-    });
-  });
-
-  const ratios = [
-    { title: "Sinus (sin θ)", formula: "sin θ = Sisi Depan / Sisi Miring", example: "Jika sisi depan = 3 dan sisi miring = 5, maka sin θ = 3/5 = 0.6" },
-    { title: "Cosinus (cos θ)", formula: "cos θ = Sisi Samping / Sisi Miring", example: "Jika sisi samping = 4 dan sisi miring = 5, maka cos θ = 4/5 = 0.8" },
-    { title: "Tangen (tan θ)", formula: "tan θ = Sisi Depan / Sisi Samping", example: "Jika sisi depan = 3 dan sisi samping = 4, maka tan θ = 3/4 = 0.75" },
-    { title: "Cosecan (csc θ)", formula: "csc θ = 1 / sin θ", example: "Jika sin θ = 0.6, maka csc θ = 1 / 0.6 = 1.67" },
-    { title: "Secan (sec θ)", formula: "sec θ = 1 / cos θ", example: "Jika cos θ = 0.8, maka sec θ = 1 / 0.8 = 1.25" },
-    { title: "Cotangen (cot θ)", formula: "cot θ = 1 / tan θ", example: "Jika tan θ = 0.75, maka cot θ = 1 / 0.75 = 1.33" }
-  ];
-
-  let currentIndex = 0;
-  const ratioContent = document.getElementById("ratioContent");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const progressBar = document.getElementById("progressBar");
-
-  function renderRatio() {
-    const { title, formula, example } = ratios[currentIndex];
-    ratioContent.innerHTML = `
-      <div class="text-center">
-        <h3 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-3">${title}</h3>
-        <p class="text-gray-700 dark:text-gray-300 mb-2"><b>Rumus:</b> ${formula}</p>
-        <p class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mt-4 shadow-sm">
-          💡 <b>Contoh:</b> ${example}
-        </p>
-      </div>
-    `;
-    progressBar.style.width = `${((currentIndex + 1) / ratios.length) * 100}%`;
-  }
-
-  prevBtn.addEventListener("click", () => {
-    if (currentIndex > 0) { currentIndex--; renderRatio(); }
-  });
-
-  nextBtn.addEventListener("click", () => {
-    if (currentIndex < ratios.length - 1) { currentIndex++; renderRatio(); }
-  });
-
-  renderRatio();
-</script>
 
 </body>
 </html>
