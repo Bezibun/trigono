@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modul Trigonometri</title>
     <link rel="icon" type="image/png" href="source/foto/logo.png" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Konfigurasi Tailwind agar support dark mode dengan class
@@ -122,7 +123,7 @@
 
 <div class="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
   <div class="bg-white dark:bg-gray-900 shadow-xl rounded-2xl w-full max-w-2xl p-8 text-center transition-colors duration-300">
-    <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">Quiz Trigonometri</h1>
+    <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-blue-400">Latihan Soal</h1>
     <div id="quiz-container" class="space-y-6">
       <div id="progress-bar" class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full">
         <div id="progress" class="h-3 bg-blue-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
@@ -255,6 +256,57 @@
   </script>
 
 
+<!-- Tambahkan di bagian <head> -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<!-- Section: Tugas Trigonometri -->
+<section id="tugas-trigonometri" class="py-20 px-6 bg-white dark:bg-gray-900 transition-colors duration-500">
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Judul -->
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-4 flex justify-center items-center gap-2">
+        <i class='bx bxs-book-content text-indigo-600 dark:text-indigo-400 text-4xl'></i> 
+        Tugas Trigonometri
+      </h2>
+      <p class="text-gray-600 dark:text-gray-300 text-lg">
+        Unduh soal berikut, kerjakan di kertas, lalu kumpulkan hasilnya melalui Google Form di bawah ini.
+      </p>
+    </div>
+
+    <!-- Card Download Soal PDF -->
+    <div class="mb-12 bg-white/80 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-xl backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <!-- ICON PDF WARNA BIRU -->
+        <div class="p-4 bg-blue-100 dark:bg-blue-900/40 rounded-full shadow-inner flex items-center justify-center">
+          <i class='bx bxs-file-doc text-blue-600 dark:text-blue-400 text-5xl'></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Soal Trigonometri</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">
+            File PDF berisi seluruh soal yang harus kamu kerjakan.
+          </p>
+        </div>
+      </div>
+      <a href="soal-trigonometri.pdf" download
+        class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300">
+        <i class='bx bx-download text-xl animate-bounce'></i> Unduh Soal
+      </a>
+    </div>
+
+    <!-- Tombol Pengumpulan Google Form -->
+    <div class="text-center mt-10">
+      <a href="https://forms.gle/94zLZ1EeFybFwGiD9" target="_blank"
+        class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full text-lg transition-all duration-300 shadow-md hover:shadow-lg">
+        <i class='bx bx-upload text-2xl'></i> Kumpulkan Tugas
+      </a>
+    </div>
+
+    <p class="text-center text-gray-500 dark:text-gray-400 text-sm mt-6 italic">
+      Pastikan kamu sudah mengisi identitas dan mengunggah hasil pekerjaanmu di Google Form dengan benar.
+    </p>
+  </div>
+</section>
 
 
 </body>
