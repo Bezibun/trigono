@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storytelling Trigonometri Interaktif</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* === Bubble Style === */
+  .bubble {
+    background: rgba(255,255,255,0.9);
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    max-width: 85%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    animation: fadeIn 0.5s ease forwards;
+  }
+  .bubble-left { align-self: flex-start; }
+  .bubble-right { align-self: flex-end; background: rgba(56,189,248,0.9); color:white; }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform: translateY(15px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .wave {
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:200%;
+    height:60px;
+    background: rgba(255,255,255,0.25);
+    border-radius:100%;
+    animation: waveMove 4s infinite linear;
+  }
+  @keyframes waveMove { 
+    0% {transform: translateX(0);} 
+    100% {transform: translateX(-50%);} 
+  }
+
+  /* === Responsive Adjustments === */
+  @media (max-width: 768px) {
+    #slide-container {
+      padding: 1rem;
+      justify-content: flex-end;
+      padding-bottom: 6rem; /* tambahan ruang agar bubble tidak nabrak tombol */
+    }
+    .bubble {
+      max-width: 95%;
+      padding: 0.8rem 1rem;
+    }
+    #button-container {
+      flex-wrap: wrap;
+      justify-content: center;
+      bottom: 0.5rem;
+      left: 0;
+      right: 0;
+    }
+    #button-container button {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body { background-color: #0f172a; }
+    .bubble { background: rgba(30,41,59,0.9); color:#f1f5f9; }
+    .bubble-right { background: rgba(56,189,248,0.9); color:white; }
+    .wave { background: rgba(255,255,255,0.1); }
+  }
+</style>
+</head>
+<body class="bg-blue-200 dark:bg-gray-900 flex items-center justify-center min-h-screen overflow-hidden">
+
+<div class="relative w-full max-w-5xl min-h-[60vh] max-h-[90vh] rounded-2xl overflow-hidden shadow-lg flex flex-col">
+
+  <img id="bgImage" src="" alt="Background Laut" 
+       class="absolute inset-0 w-full h-full object-contain sm:object-cover transition-all duration-700 ease-in-out bg-blue-200">
+
+  <div class="wave"></div>
+
+  <div id="slide-container" 
+       class="absolute inset-0 flex flex-col justify-end sm:justify-start p-4 sm:p-8 gap-4 pointer-events-none z-10 overflow-y-auto"></div>
+
+  <div id="button-container" 
+       class="absolute bottom-4 right-4 flex gap-3 sm:gap-4 z-20 flex-wrap sm:flex-nowrap justify-center sm:justify-end w-full sm:w-auto px-4">
+    <button id="prevBtn" 
+      class="pointer-events-auto px-4 py-2 bg-gray-300 dark:bg-gray-700 text-sm sm:text-base rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition">Previous</button>
+    <button id="nextBtn" 
+      class="pointer-events-auto px-4 py-2 bg-blue-500 text-white text-sm sm:text-base rounded-lg hover:bg-blue-600 transition">Next</button>
+  </div>
+
+</div>
+
+<script>
+const slides = [
+  { text: "Perkenalkan, ini Budi, seorang pelayar yang sedang melakukan perjalanan ke Mercusuar.", speaker:"narrator", bg:"/source/foto/stroytelling/bg-2.jpeg" },
+  { text: "Budi sedang berada di laut, siap untuk mengukur jarak ke mercusuar.", speaker:"narrator", bg:"/source/foto/stroytelling/bg-3.jpeg" },
+  { text: "Tapi alat pengukur jaraknya di kapal rusak, Budi bingung harus bagaimana...", speaker:"Budi", bg:"/source/foto/stroytelling/bg-3.jpeg" },
+  { 
+    text: "Budi bertanya: 'Aku harus bagaimana?'", 
+    speaker:"Budi", 
+    decision:true, 
+    bg:"/source/foto/stroytelling/bg-2.jpeg",
+    options:[
+      { text:"Gunakan penggaris", correct:false },
+      { text:"Gunakan rumus trigonometri", correct:true }
+    ]
+  },
+  { 
+    text: "Benar! Kita bisa menggunakan rumus trigonometri untuk mengetahui jarak kapal ke mercusuar.", 
+    speaker:"narrator", 
+    bg:"/source/foto/stroytelling/bg-1.jpeg" 
+  },
+  { 
+    text: "Jika diketahui tinggi mercusuar adalah 60 meter dan sudut elevasi dari kapal ke puncak mercusuar adalah 30°. Dengan konsep tan θ = tinggi / jarak, maka jarak kapal ke mercusuar dapat dihitung.", 
+    speaker:"narrator", 
+    bg:"/source/foto/stroytelling/bg-1.jpeg" 
+  },
+  { 
+    text: `Kita hitung bersama, ya!<br>
+    tan(30°) = 60 / jarak<br>
+    → jarak = 60 / tan(30°)<br>
+    → jarak = 60 / 0.577<br>
+    → jarak = 103.92 meter<br><br>
+    Jadi, jarak kapal ke mercusuar adalah sekitar 103.92 meter.`,
+    speaker:"narrator", 
+    bg:"/source/foto/stroytelling/bg-1.jpeg"
+  },
+  { 
+    text: "Hebat! Kamu telah berhasil memahami bagaimana trigonometri digunakan dalam kehidupan nyata di laut. 🚢✨", 
+    speaker:"narrator", 
+    bg:"/source/foto/stroytelling/bg-2.jpeg",
+    ending:true
+  }
+];
+
+let currentSlide = 0;
+const slideContainer = document.getElementById('slide-container');
+const buttonContainer = document.getElementById('button-container');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const bgImage = document.getElementById('bgImage');
+
+function renderSlide(){
+  const slide = slides[currentSlide];
+  slideContainer.innerHTML = "";
+  bgImage.src = slide.bg;
+
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${slide.speaker==='Budi'?'bubble-right':'bubble-left'}`;
+  bubble.innerHTML = slide.text;
+  slideContainer.appendChild(bubble);
+
+  prevBtn.style.display = "inline-block";
+  nextBtn.style.display = "inline-block";
+
+  if(slide.decision){
+    const divOptions = document.createElement('div');
+    divOptions.className = "flex flex-wrap gap-3 mt-4 pointer-events-auto";
+    slide.options.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.textContent = opt.text;
+      btn.className = "px-3 sm:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm sm:text-base transition";
+      btn.addEventListener('click',()=>{
+        const feedback = document.createElement('div');
+        feedback.className="bubble bubble-left mt-4";
+        if(opt.correct){
+          feedback.textContent="Benar! Kita gunakan rumus trigonometri.";
+          slideContainer.appendChild(feedback);
+          currentSlide++;
+          setTimeout(renderSlide,1000);
+        } else {
+          feedback.textContent="Ups, penggaris tidak cukup untuk mengukur jarak dari kapal ke mercusuar.";
+          slideContainer.appendChild(feedback);
+        }
+      });
+      divOptions.appendChild(btn);
+    });
+    slideContainer.appendChild(divOptions);
+  }
+
+  if(slide.ending){
+    buttonContainer.innerHTML = `
+      <button id="restartBtn" class="pointer-events-auto px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">🔁 Ulangi dari Awal</button>
+      <button id="materiBtn" class="pointer-events-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">📘 Ke Penyajian Materi</button>
+    `;
+    document.getElementById('restartBtn').addEventListener('click', ()=>{
+      currentSlide = 0;
+      resetButtons();
+      renderSlide();
+    });
+    document.getElementById('materiBtn').addEventListener('click', ()=>{
+      window.location.href = "materi.html";
+    });
+    return;
+  }
+
+  prevBtn.disabled = currentSlide === 0;
+  nextBtn.disabled = slide.decision;
+}
+
+function resetButtons(){
+  buttonContainer.innerHTML = `
+    <button id="prevBtn" class="pointer-events-auto px-4 py-2 bg-gray-300 dark:bg-gray-700 text-sm sm:text-base rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition">Previous</button>
+    <button id="nextBtn" class="pointer-events-auto px-4 py-2 bg-blue-500 text-white text-sm sm:text-base rounded-lg hover:bg-blue-600 transition">Next</button>
+  `;
+  attachButtons();
+}
+
+function attachButtons(){
+  const prev = document.getElementById('prevBtn');
+  const next = document.getElementById('nextBtn');
+  prev.addEventListener('click',()=>{ if(currentSlide>0){ currentSlide--; renderSlide(); }});
+  next.addEventListener('click',()=>{ if(currentSlide<slides.length-1){ currentSlide++; renderSlide(); }});
+}
+
+attachButtons();
+renderSlide();
+</script>
+</body>
+</html>

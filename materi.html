@@ -372,9 +372,9 @@
   </div>
 
 
-<div class="text-center mt-10">
-  <p class="text-gray-700 dark:text-gray-300 mb-2 text-base md:text-lg">Lanjut ke contoh soal</p>
-  <a href="#latihan" class="inline-block animate-bounce hover:scale-110 transition-transform duration-300">
+<div class="text-center mt-10 mb-48">
+  <p class="text-gray-700 dark:text-gray-300 mb-2 text-base md:text-lg">Lanjut ke simulasi</p>
+  <a href="#simulasi" class="inline-block animate-bounce hover:scale-110 transition-transform duration-300">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
@@ -395,6 +395,304 @@
     to { opacity: 1; transform: translateY(0); }
   }
 </style>
+
+
+
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom right, #2563EB, #1E40AF);
+    color: #1e293b;
+    transition: all 0.5s ease;
+  }
+
+  svg { overflow: visible; }
+  #flag, #studentGroup { transition: transform 400ms ease; }
+  #viewLine { transition: all 400ms ease; }
+  #angleText { font-family: 'Poppins', sans-serif; font-size: 12px; fill: #000000; }
+
+
+
+  .glass {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.5s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(to bottom right, #0f172a, #1e293b);
+      color: #e2e8f0;
+    }
+    
+    #angleText { fill: #000000; }
+  }
+</style>
+ <section id="simulasi" class="flex items-center justify-center min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-800 dark:to-gray-900">
+  <div class="w-full max-w-6xl bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 overflow-auto flex flex-col shadow-xl mt-16 mb-16">
+
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-6 tracking-tight flex items-center justify-center gap-2 text-blue-800 dark:text-blue-300 ">
+      <i class='bx bx-compass text-3xl sm:text-4xl'></i>
+      Simulasi Sudut Elevasi Upacara Bendera
+    </h2>
+
+    <!-- AREA SIMULASI -->
+    <div class="relative w-full aspect-[2/1] rounded-2xl overflow-hidden border border-blue-200 dark:border-gray-700 shadow-md bg-gradient-to-b from-blue-100 to-white p-2 sm:p-4">
+      <svg id="simCanvas" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+        <rect x="0" y="250" width="600" height="50" fill="#a7f3d0"></rect>
+        <rect id="flagPole" x="500" y="100" width="6" height="150" fill="#1E40AF"></rect>
+
+        <g id="flag" transform="translate(506,200)">
+          <rect width="60" height="15" fill="#ef4444"></rect>
+          <rect y="15" width="60" height="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="0.5"></rect>
+        </g>
+
+        <g id="studentGroup" transform="translate(100,230)">
+          <circle cx="0" cy="0" r="10" fill="#1E3A8A"></circle>
+          <rect x="-4" y="0" width="8" height="20" rx="3" fill="#2563EB"></rect>
+        </g>
+
+        <line id="viewLine" x1="100" y1="230" x2="536" y2="200"
+              stroke="#38BDF8" stroke-width="2" stroke-dasharray="6,4" />
+
+        <text id="angleText" x="120" y="215">θ = 0°</text>
+      </svg>
+    </div>
+
+    <!-- SLIDER KONTROL -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
+      <div class="p-4 bg-white/90 dark:bg-gray-700/50 rounded-2xl shadow-md border border-blue-100 dark:border-gray-600">
+        <label class="block font-semibold mb-2 flex items-center gap-2 text-blue-800 dark:text-blue-200 text-sm sm:text-base">
+          <i class='bx bx-arrows-horizontal text-blue-600 text-xl'></i> Jarak siswa ke tiang (m)
+        </label>
+        <input id="distanceSlider" type="range" min="2" max="50" value="30" step="0.5" class="w-full accent-blue-600">
+        <p class="text-sm mt-1 text-gray-600 dark:text-gray-300">Jarak: <span id="distanceValue">30</span> m</p>
+      </div>
+
+      <div class="p-4 bg-white/90 dark:bg-gray-700/50 rounded-2xl shadow-md border border-blue-100 dark:border-gray-600">
+        <label class="block font-semibold mb-2 flex items-center gap-2 text-blue-800 dark:text-blue-200 text-sm sm:text-base">
+          <i class='bx bx-up-arrow-alt text-red-500 text-xl'></i> Tinggi bendera (m)
+        </label>
+        <input id="heightSlider" type="range" min="1" max="40" value="25" step="0.5" class="w-full accent-red-500">
+        <p class="text-sm mt-1 text-gray-600 dark:text-gray-300">Tinggi: <span id="heightValue">25</span> m</p>
+      </div>
+    </div>
+
+    <!-- HASIL RUMUS -->
+    <div class="mt-6 bg-white/90 dark:bg-gray-700/50 border border-blue-100 dark:border-gray-600 rounded-2xl shadow-inner p-5 text-gray-800 dark:text-gray-200 text-sm sm:text-base">
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <i class='bx bx-calculator text-2xl text-blue-600'></i>
+        <p class="font-bold text-lg text-blue-800 dark:text-blue-200">Perhitungan Sudut Elevasi</p>
+      </div>
+      <p id="formulaText" class="text-center text-base md:text-lg leading-relaxed font-medium text-gray-700 dark:text-gray-300">
+        tan(θ) = tinggi / jarak = 0 / 0 = 0 → θ = 0°
+      </p>
+
+      <div class="mt-4 flex justify-center">
+        <div class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-6 py-2 rounded-xl text-lg font-bold shadow">
+          θ = <span id="angleResult">0°</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="quizSection"
+      class="flex items-center justify-center min-h-screen w-full 
+            bg-gradient-to-b from-blue-50 via-white to-blue-100 
+            dark:from-[#0f172a] dark:via-[#1e293b] dark:to-[#0f172a] 
+            transition-all duration-700 py-16 px-4">
+
+      <!-- QUIZ CONTAINER -->
+      <div id="quizContainer"
+        class="w-full max-w-3xl rounded-3xl shadow-xl border border-blue-200 dark:border-blue-800 
+              bg-white dark:bg-[#1e293b] p-8 text-center transition-all duration-500">
+
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-[#2563eb] dark:text-blue-400 mb-3 flex items-center justify-center gap-2">
+          🌊 Pertanyaan Simulasi
+        </h3>
+
+        <p class="text-gray-700 dark:text-gray-300 text-base sm:text-lg mb-6 leading-relaxed">
+          Apakah jarak kapal (pengamat) ke mercusuar dipengaruhi oleh <strong>sudut elevasi</strong>?
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 mb-6">
+          <button id="btnYes"
+            class="px-6 py-3 rounded-2xl bg-[#2563eb] text-white font-semibold text-base shadow-md 
+                  hover:bg-[#1d4ed8] hover:scale-105 transition-all duration-300">
+            Iya
+          </button>
+          <button id="btnNo"
+            class="px-6 py-3 rounded-2xl bg-[#60a5fa] text-white font-semibold text-base shadow-md 
+                  hover:bg-[#3b82f6] hover:scale-105 transition-all duration-300">
+            Tidak
+          </button>
+        </div>
+
+        <div id="quizAnswer"
+          class="hidden opacity-0 transform scale-95 transition-all duration-500 
+                bg-blue-50 dark:bg-blue-900/40 rounded-2xl p-5 text-left shadow-inner">
+        </div>
+      </div>
+    </div>
+
+
+
+      <div class="text-center mt-24 mb-16">
+        <p class="text-gray-700 dark:text-gray-300 mb-2 text-base md:text-lg">Lanjut ke contoh soal</p>
+        <a href="#latihan" class="inline-block animate-bounce hover:scale-110 transition-transform duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+      </div>
+  </div>
+
+
+
+</section>
+
+
+
+<!-- QUIZ INTERAKTIF -->
+<!-- WRAPPER QUIZ -->
+
+
+<script>
+  const btnYes = document.getElementById('btnYes');
+  const btnNo = document.getElementById('btnNo');
+  const quizAnswer = document.getElementById('quizAnswer');
+
+  function showAnswer(isYes) {
+    const jarak = parseFloat(document.getElementById('distanceSlider')?.value || 10);
+    const tinggi = parseFloat(document.getElementById('heightSlider')?.value || 5);
+
+    const tanTheta = tinggi / jarak;
+    const rad = Math.atan(tanTheta);
+    const deg = rad * 180 / Math.PI;
+
+    let html = '';
+
+    if (isYes) {
+      html += `
+        <p class="text-lg font-bold text-[#2563eb] dark:text-blue-300 mb-2">✅ Jawaban: Iya</p>
+        <p class="text-gray-700 dark:text-gray-200 mb-3 leading-relaxed">
+          Benar! Sudut elevasi (θ) berhubungan langsung dengan tinggi (h) dan jarak (d)
+          melalui rumus <strong>tan(θ) = h / d</strong>. Jadi jika tinggi tetap dan sudut bertambah,
+          jarak (d) akan berkurang agar persamaan tetap benar. Sudut elevasi memang memengaruhi jarak pengamat ke mercusuar.
+        </p>
+      `;
+    } else {
+      html += `
+        <p class="text-lg font-bold text-[#2563eb] dark:text-blue-300 mb-2">❌ Jawaban: Tidak</p>
+        <p class="text-gray-700 dark:text-gray-200 mb-3 leading-relaxed">
+          Kurang tepat! Berdasarkan <strong>tan(θ) = h / d</strong>, perubahan sudut elevasi menyebabkan jarak (d)
+          ikut berubah bila tinggi (h) tetap. Jadi sudut elevasi dan jarak saling memengaruhi.
+        </p>
+      `;
+    }
+
+    html += `
+      <div class="mt-4 p-4 rounded-xl bg-white/70 dark:bg-[#1e293b]/80 border border-blue-100 dark:border-blue-800 shadow-inner">
+        <p class="text-sm font-semibold text-[#2563eb] dark:text-blue-300 mb-2">📏 Nilai saat ini:</p>
+        <ul class="text-sm text-gray-700 dark:text-gray-200 list-disc list-inside space-y-1">
+          <li>Tinggi mercusuar (h): <strong>${tinggi.toFixed(1)} m</strong></li>
+          <li>Jarak kapal (d): <strong>${jarak.toFixed(1)} m</strong></li>
+          <li>Sudut elevasi (θ): <strong>${deg.toFixed(2)}°</strong></li>
+        </ul>
+      </div>
+    `;
+
+    quizAnswer.innerHTML = html;
+    quizAnswer.classList.remove('hidden');
+    setTimeout(() => {
+      quizAnswer.classList.add('opacity-100', 'scale-100');
+      quizAnswer.classList.remove('opacity-0', 'scale-95');
+    }, 50);
+  }
+
+  btnYes.addEventListener('click', () => showAnswer(true));
+  btnNo.addEventListener('click', () => showAnswer(false));
+</script>
+
+
+
+
+
+<script>
+  const flag = document.getElementById('flag');
+  const studentGroup = document.getElementById('studentGroup');
+  const viewLine = document.getElementById('viewLine');
+  const angleText = document.getElementById('angleText');
+  const distanceSlider = document.getElementById('distanceSlider');
+  const heightSlider = document.getElementById('heightSlider');
+  const distanceValue = document.getElementById('distanceValue');
+  const heightValue = document.getElementById('heightValue');
+  const formulaText = document.getElementById('formulaText');
+  const angleResult = document.getElementById('angleResult');
+
+  const poleX = 500, poleY = 100, poleH = 150, poleW = 6;
+  const flagW = 60, flagH = 30;
+  const leftBound = 40, nearPoleOffset = 80;
+
+  function updateSimulasi() {
+    const jarak = parseFloat(distanceSlider.value);
+    const tinggi = parseFloat(heightSlider.value);
+
+    distanceValue.textContent = jarak.toFixed(1);
+    heightValue.textContent = tinggi.toFixed(1);
+
+    const fracH = Math.max(0, Math.min(1, (tinggi - 1) / (40 - 1)));
+    const flagTranslateY = poleY + (1 - fracH) * (poleH - flagH);
+    const flagTranslateX = poleX + poleW;
+    flag.setAttribute('transform', `translate(${flagTranslateX}, ${flagTranslateY})`);
+
+    const flagCenterX = flagTranslateX + flagW / 2;
+    const flagCenterY = flagTranslateY + flagH / 2;
+
+    const t = Math.max(0, Math.min(1, (jarak - 2) / (50 - 2)));
+    const maxStudentX = flagCenterX - nearPoleOffset;
+    const minStudentX = leftBound;
+    const studentX = maxStudentX - t * (maxStudentX - minStudentX);
+    const studentY = 230;
+    studentGroup.setAttribute('transform', `translate(${studentX}, ${studentY})`);
+
+    viewLine.setAttribute('x1', studentX);
+    viewLine.setAttribute('y1', studentY);
+    viewLine.setAttribute('x2', flagCenterX);
+    viewLine.setAttribute('y2', flagCenterY);
+
+    const tanTheta = tinggi / jarak;
+    const rad = Math.atan(tanTheta);
+    const deg = (rad * 180 / Math.PI).toFixed(2);
+    const tanVal = tanTheta.toFixed(3);
+
+    angleText.textContent = `θ = ${deg}°`;
+    angleText.setAttribute('x', studentX + 15);
+    angleText.setAttribute('y', studentY - 12);
+    angleText.setAttribute('fill', '#000000'); // <<< ini bikin warna teks jadi hitam
+
+
+    formulaText.innerHTML = `
+      tan(θ) = <span class="text-blue-700 font-semibold dark:text-blue-300">${tinggi}</span> /
+      <span class="text-blue-700 font-semibold dark:text-blue-300">${jarak}</span> =
+      <span class="text-rose-600 font-semibold">${tanVal}</span>
+      → θ = <span class="font-bold text-blue-700 dark:text-blue-300">${deg}°</span>
+    `;
+    angleResult.textContent = `${deg}°`;
+  }
+
+  distanceSlider.addEventListener('input', updateSimulasi);
+  heightSlider.addEventListener('input', updateSimulasi);
+  updateSimulasi();
+</script>
+
+
+
+
+
+
 
 
 <!-- Section: Download Handout -->

@@ -1,72 +1,175 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penyajian Materi Trigonometri</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulasi Trigonometri Modern</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.5s ease;
+    }
+
+    svg { overflow: visible; }
+    #flag, #studentGroup { transition: transform 400ms ease; }
+    #viewLine { transition: all 400ms ease; }
+    #angleText { font-family: 'Poppins', sans-serif; font-size: 12px; fill: #1e293b; }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: background 0.5s ease, border 0.5s ease;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(to bottom right, #0f172a, #1e293b);
+        color: #e2e8f0;
+      }
+      .glass {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      #angleText { fill: #e2e8f0; }
+    }
+  </style>
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-500">
-
-
-
-<!-- Section: Tugas Trigonometri -->
-<!-- Tambahkan link Boxicons di bagian <head> -->
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-<!-- Tambahkan link Boxicons di bagian <head> -->
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-<!-- Section: Tugas Trigonometri -->
-<section id="tugas-trigonometri" class="py-20 px-6 bg-white dark:bg-gray-900 transition-colors duration-500">
-  <div class="max-w-4xl mx-auto">
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 to-white dark:from-gray-800 dark:to-gray-900">
+  <div class="w-full max-w-5xl glass rounded-none p-4 sm:p-6 overflow-auto flex flex-col">
     
-    <!-- Judul -->
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-4 flex justify-center items-center gap-2">
-        <i class='bx bxs-book-content text-indigo-600 dark:text-indigo-400 text-4xl'></i> 
-        Tugas Trigonometri
-      </h2>
-      <p class="text-gray-600 dark:text-gray-300 text-lg">
-        Unduh soal di bawah ini, kerjakan di kertas, lalu kumpulkan hasilnya melalui Google Form.
-      </p>
+    <h2 class="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6 tracking-tight flex items-center justify-center gap-2">
+      <i class='bx bx-compass text-2xl sm:text-3xl'></i>
+      Simulasi Sudut Elevasi Upacara Bendera
+    </h2>
+
+    <!-- AREA SIMULASI -->
+    <div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden border border-white/40 shadow-md bg-gradient-to-b from-sky-50 to-white p-1 sm:p-3 dark:from-gray-800 dark:to-gray-900">
+      <svg id="simCanvas" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+        <rect x="0" y="250" width="600" height="50" fill="#c7f9cc"></rect>
+        <rect id="flagPole" x="500" y="100" width="6" height="150" fill="#475569"></rect>
+
+        <g id="flag" transform="translate(506,200)">
+          <rect width="60" height="15" fill="#ef4444"></rect>
+          <rect y="15" width="60" height="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="0.5"></rect>
+        </g>
+
+        <g id="studentGroup" transform="translate(100,230)">
+          <circle cx="0" cy="0" r="10" fill="#1e3a8a"></circle>
+          <rect x="-4" y="0" width="8" height="20" rx="3" fill="#1d4ed8"></rect>
+        </g>
+
+        <line id="viewLine" x1="100" y1="230" x2="536" y2="200"
+              stroke="#0ea5e9" stroke-width="2" stroke-dasharray="6,4" />
+
+        <text id="angleText" x="120" y="215">θ = 0°</text>
+      </svg>
     </div>
 
-    <!-- Card Download Soal -->
-    <div class="mb-12 bg-white/80 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-xl backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <i class='bx bxs-file-pdf text-red-600 text-5xl'></i>
-        <div>
-          <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Soal Trigonometri</h3>
-          <p class="text-gray-500 dark:text-gray-400 text-sm">Format PDF – berisi soal latihan yang harus kamu kerjakan</p>
+    <!-- SLIDER KONTROL -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
+      <div class="p-3 sm:p-4 bg-white/80 dark:bg-gray-700/50 rounded-xl shadow-sm border border-slate-200 dark:border-gray-600">
+        <label class="block font-semibold mb-2 flex items-center gap-2 text-sm sm:text-base">
+          <i class='bx bx-arrows-horizontal text-blue-500 text-xl'></i> Jarak siswa ke tiang (m)
+        </label>
+        <input id="distanceSlider" type="range" min="2" max="50" value="30" step="0.5" class="w-full accent-blue-600">
+        <p class="text-sm mt-1">Jarak: <span id="distanceValue">30</span> m</p>
+      </div>
+
+      <div class="p-3 sm:p-4 bg-white/80 dark:bg-gray-700/50 rounded-xl shadow-sm border border-slate-200 dark:border-gray-600">
+        <label class="block font-semibold mb-2 flex items-center gap-2 text-sm sm:text-base">
+          <i class='bx bx-up-arrow-alt text-red-500 text-xl'></i> Tinggi bendera (m)
+        </label>
+        <input id="heightSlider" type="range" min="1" max="40" value="25" step="0.5" class="w-full accent-red-500">
+        <p class="text-sm mt-1">Tinggi: <span id="heightValue">25</span> m</p>
+      </div>
+    </div>
+
+    <!-- HASIL RUMUS -->
+    <div class="mt-6 bg-white/80 dark:bg-gray-700/50 border border-slate-200/60 dark:border-gray-600 rounded-2xl shadow-inner p-4 sm:p-5 text-gray-800 dark:text-gray-200 text-sm sm:text-base">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <i class='bx bx-calculator text-xl sm:text-2xl'></i>
+        <p class="font-bold text-base sm:text-lg">Perhitungan Sudut Elevasi</p>
+      </div>
+      <p id="formulaText" class="text-center text-sm sm:text-base md:text-lg leading-relaxed font-medium">
+        tan(θ) = tinggi / jarak = 0 / 0 = 0 → θ = 0°
+      </p>
+
+      <div class="mt-4 flex justify-center">
+        <div class="bg-sky-100 dark:bg-blue-900 text-sky-800 dark:text-blue-300 px-4 sm:px-6 py-2 rounded-xl text-base sm:text-lg font-bold shadow">
+          θ = <span id="angleResult">0°</span>
         </div>
       </div>
-      <a href="soal-trigonometri.pdf" download
-        class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300">
-        <i class='bx bx-download text-xl'></i> Unduh Soal
-      </a>
     </div>
-
-    <!-- Tombol Pengumpulan -->
-    <div class="text-center mt-10">
-      <a href="https://forms.gle/your-google-form-link" target="_blank"
-        class="inline-flex items-center gap-3 px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full text-lg transition-all duration-300 shadow-md hover:shadow-lg">
-        <i class='bx bx-upload text-2xl'></i> Kumpulkan Tugas di Google Form
-      </a>
-    </div>
-
-    <p class="text-center text-gray-500 dark:text-gray-400 text-sm mt-6 italic">
-      Pastikan kamu sudah mengisi identitas dan mengunggah hasil pekerjaanmu di Google Form dengan benar.
-    </p>
   </div>
-</section>
 
+  <script>
+    const flag = document.getElementById('flag');
+    const studentGroup = document.getElementById('studentGroup');
+    const viewLine = document.getElementById('viewLine');
+    const angleText = document.getElementById('angleText');
+    const distanceSlider = document.getElementById('distanceSlider');
+    const heightSlider = document.getElementById('heightSlider');
+    const distanceValue = document.getElementById('distanceValue');
+    const heightValue = document.getElementById('heightValue');
+    const formulaText = document.getElementById('formulaText');
+    const angleResult = document.getElementById('angleResult');
 
+    const poleX = 500, poleY = 100, poleH = 150, poleW = 6;
+    const flagW = 60, flagH = 30;
+    const leftBound = 40, nearPoleOffset = 80;
 
+    function updateSimulasi() {
+      const jarak = parseFloat(distanceSlider.value);
+      const tinggi = parseFloat(heightSlider.value);
 
+      distanceValue.textContent = jarak.toFixed(1);
+      heightValue.textContent = tinggi.toFixed(1);
 
+      const fracH = Math.max(0, Math.min(1, (tinggi - 1) / (40 - 1)));
+      const flagTranslateY = poleY + (1 - fracH) * (poleH - flagH);
+      const flagTranslateX = poleX + poleW;
+      flag.setAttribute('transform', `translate(${flagTranslateX}, ${flagTranslateY})`);
 
+      const flagCenterX = flagTranslateX + flagW / 2;
+      const flagCenterY = flagTranslateY + flagH / 2;
+
+      const t = Math.max(0, Math.min(1, (jarak - 2) / (50 - 2)));
+      const maxStudentX = flagCenterX - nearPoleOffset;
+      const minStudentX = leftBound;
+      const studentX = maxStudentX - t * (maxStudentX - minStudentX);
+      const studentY = 230;
+      studentGroup.setAttribute('transform', `translate(${studentX}, ${studentY})`);
+
+      viewLine.setAttribute('x1', studentX);
+      viewLine.setAttribute('y1', studentY);
+      viewLine.setAttribute('x2', flagCenterX);
+      viewLine.setAttribute('y2', flagCenterY);
+
+      const tanTheta = tinggi / jarak;
+      const rad = Math.atan(tanTheta);
+      const deg = (rad * 180 / Math.PI).toFixed(2);
+      const tanVal = tanTheta.toFixed(3);
+
+      angleText.textContent = `θ = ${deg}°`;
+      angleText.setAttribute('x', studentX + 15);
+      angleText.setAttribute('y', studentY - 12);
+
+      formulaText.innerHTML = `
+        tan(θ) = <span class="text-blue-700 font-semibold dark:text-blue-300">${tinggi}</span> /
+        <span class="text-blue-700 font-semibold dark:text-blue-300">${jarak}</span> =
+        <span class="text-rose-600 font-semibold">${tanVal}</span>
+        → θ = <span class="font-bold text-indigo-700 dark:text-indigo-300">${deg}°</span>
+      `;
+      angleResult.textContent = `${deg}°`;
+    }
+
+    distanceSlider.addEventListener('input', updateSimulasi);
+    heightSlider.addEventListener('input', updateSimulasi);
+    updateSimulasi();
+  </script>
 </body>
 </html>
