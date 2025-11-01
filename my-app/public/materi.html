@@ -510,11 +510,11 @@
               bg-white dark:bg-[#1e293b] p-8 text-center transition-all duration-500">
 
         <h3 class="text-2xl sm:text-3xl font-extrabold text-[#2563eb] dark:text-blue-400 mb-3 flex items-center justify-center gap-2">
-          🌊 Pertanyaan Simulasi
+          Pertanyaan Simulasi
         </h3>
 
         <p class="text-gray-700 dark:text-gray-300 text-base sm:text-lg mb-6 leading-relaxed">
-          Apakah jarak kapal (pengamat) ke mercusuar dipengaruhi oleh <strong>sudut elevasi</strong>?
+          Apakah jarak pandangan siswa ke tinggi bendera dipengaruhi oleh <strong>sudut elevasi</strong>?
         </p>
 
         <div class="flex flex-wrap justify-center gap-4 mb-6">
@@ -580,7 +580,7 @@
         <p class="text-gray-700 dark:text-gray-200 mb-3 leading-relaxed">
           Benar! Sudut elevasi (θ) berhubungan langsung dengan tinggi (h) dan jarak (d)
           melalui rumus <strong>tan(θ) = h / d</strong>. Jadi jika tinggi tetap dan sudut bertambah,
-          jarak (d) akan berkurang agar persamaan tetap benar. Sudut elevasi memang memengaruhi jarak pengamat ke mercusuar.
+          jarak (d) akan berkurang agar persamaan tetap benar. Sudut elevasi memang memengaruhi jarak siswa ke tinggi bendera.
         </p>
       `;
     } else {
@@ -597,8 +597,8 @@
       <div class="mt-4 p-4 rounded-xl bg-white/70 dark:bg-[#1e293b]/80 border border-blue-100 dark:border-blue-800 shadow-inner">
         <p class="text-sm font-semibold text-[#2563eb] dark:text-blue-300 mb-2">📏 Nilai saat ini:</p>
         <ul class="text-sm text-gray-700 dark:text-gray-200 list-disc list-inside space-y-1">
-          <li>Tinggi mercusuar (h): <strong>${tinggi.toFixed(1)} m</strong></li>
-          <li>Jarak kapal (d): <strong>${jarak.toFixed(1)} m</strong></li>
+          <li>Tinggi bendera (h): <strong>${tinggi.toFixed(1)} m</strong></li>
+          <li>Jarak siswa (d): <strong>${jarak.toFixed(1)} m</strong></li>
           <li>Sudut elevasi (θ): <strong>${deg.toFixed(2)}°</strong></li>
         </ul>
       </div>
