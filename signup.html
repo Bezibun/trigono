@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen">
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-80">
+    <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">Daftar Akun</h2>
+
+    <input id="username" type="text" placeholder="Username" class="w-full mb-3 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" required>
+    <input id="email" type="email" placeholder="Email" class="w-full mb-3 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" required>
+    <input id="password" type="password" placeholder="Password" class="w-full mb-3 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" required>
+    <input id="confirm" type="password" placeholder="Konfirmasi Password" class="w-full mb-4 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none" required>
+
+    <button id="signupBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md">Daftar</button>
+    <p class="text-sm mt-3 text-center">Sudah punya akun? 
+      <a href="login.html" class="text-blue-600 font-medium hover:underline">Login</a>
+    </p>
+  </div>
+
+  <script type="module">
+    // Import Firebase SDK versi 11
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Konfigurasi Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeJMh6W7I3yVDQqEJQzw8CegsD8NYEVU4",
+      authDomain: "modul-trigono.firebaseapp.com",
+      projectId: "modul-trigono",
+      storageBucket: "modul-trigono.appspot.com",
+      messagingSenderId: "980014540419",
+      appId: "1:980014540419:web:86285499e9fe06c823ddb6",
+      measurementId: "G-NWLCNBXEQ6"
+    };
+
+    // Inisialisasi Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Tombol daftar
+    document.getElementById("signupBtn").addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+
+      // Validasi input
+      if (!username || !email || !password || !confirm) {
+        alert("Semua field harus diisi!");
+        return;
+      }
+      if (password.length < 6) {
+        alert("Password minimal 6 karakter!");
+        return;
+      }
+      if (password !== confirm) {
+        alert("Password dan konfirmasi tidak cocok!");
+        return;
+      }
+
+      try {
+        // Buat akun di Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Simpan data user di Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          username: username,
+          email: email,
+          createdAt: new Date().toISOString()
+        });
+
+        alert("✅ Akun berhasil dibuat!");
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Firebase Error:", error);
+        if (error.code === "auth/email-already-in-use") {
+          alert("Email ini sudah terdaftar!");
+        } else if (error.code === "auth/invalid-email") {
+          alert("Format email tidak valid!");
+        } else {
+          alert("Terjadi kesalahan: " + error.message);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

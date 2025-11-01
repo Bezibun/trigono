@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Web Edukasi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #e8f1ff, #ffffff);
+      transition: background 0.5s ease;
+    }
+
+    .dark body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+    }
+
+    /* Animasi background lembut */
+    .animated-bg {
+      position: fixed;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 70%),
+                  radial-gradient(circle at 75% 75%, #60a5fa 0%, transparent 70%);
+      animation: moveBg 10s linear infinite;
+      z-index: -1;
+      opacity: 0.2;
+    }
+
+    @keyframes moveBg {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-25%, -25%); }
+      100% { transform: translate(0, 0); }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <div class="animated-bg"></div>
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-white/70 dark:bg-slate-800/70 shadow-md backdrop-blur-md">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2">
+      <i class="bx bx-math text-3xl text-blue-600"></i>
+      <span class="text-xl font-bold text-blue-700 dark:text-white">TrigonoLearn</span>
+    </div>
+
+    <!-- Menu -->
+    <ul class="hidden md:flex space-x-8 text-gray-700 dark:text-gray-200 font-medium">
+      <li><a href="#" class="hover:text-blue-600">Beranda</a></li>
+      <li><a href="#" class="hover:text-blue-600">Materi</a></li>
+      <li><a href="#" class="hover:text-blue-600">Latihan</a></li>
+      <li><a href="#" class="hover:text-blue-600">Games</a></li>
+    </ul>
+
+    <!-- Profil -->
+    <div class="relative">
+      <button id="profileBtn" class="flex items-center space-x-2">
+        <img id="navProfilePic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+             class="w-10 h-10 rounded-full border-2 border-blue-600 object-cover">
+      </button>
+
+      <!-- Dropdown Profile -->
+      <div id="profileDropdown" class="hidden absolute right-0 mt-3 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-4">
+        <div class="flex flex-col items-center">
+          <div class="relative">
+            <img id="profilePic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                 class="w-20 h-20 rounded-full border-4 border-blue-500 object-cover">
+            <label for="fileInput" class="absolute bottom-1 right-1 bg-blue-600 text-white p-2 rounded-full cursor-pointer">
+              <i class="bx bx-edit-alt"></i>
+            </label>
+            <input id="fileInput" type="file" accept="image/*" class="hidden">
+          </div>
+          <h2 id="usernameDisplay" class="mt-3 text-lg font-semibold text-gray-800 dark:text-gray-200"></h2>
+          <button id="logoutBtn" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            <i class="bx bx-log-out"></i> Keluar
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Konten Utama -->
+  <main class="flex-grow flex items-center justify-center text-center p-6">
+    <div>
+      <h1 class="text-4xl font-bold text-blue-700 dark:text-blue-400">Selamat Datang di TrigonoLearn!</h1>
+      <p class="text-gray-600 dark:text-gray-300 mt-3 text-lg">Pelajari trigonometri dengan cara yang interaktif dan menyenangkan!</p>
+    </div>
+  </main>
+
+  <script>
+    // Ambil username dari localStorage
+    const username = localStorage.getItem('username');
+    document.getElementById('usernameDisplay').textContent = username || "Pengguna";
+    
+    // Toggle dropdown profil
+    const profileBtn = document.getElementById('profileBtn');
+    const dropdown = document.getElementById('profileDropdown');
+    profileBtn.addEventListener('click', () => {
+      dropdown.classList.toggle('hidden');
+    });
+
+    // Ganti foto profil
+    const fileInput = document.getElementById('fileInput');
+    const profilePic = document.getElementById('profilePic');
+    const navProfilePic = document.getElementById('navProfilePic');
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          profilePic.src = reader.result;
+          navProfilePic.src = reader.result;
+          localStorage.setItem('profilePic', reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Load foto profil dari localStorage
+    const savedPic = localStorage.getItem('profilePic');
+    if (savedPic) {
+      profilePic.src = savedPic;
+      navProfilePic.src = savedPic;
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'login.html';
+    });
+
+    // Cegah akses tanpa login
+    if (!localStorage.getItem('loggedIn')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

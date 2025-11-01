@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Akun</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen">
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-80">
+    <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">Login</h2>
+
+    <input id="email" type="email" placeholder="Email" 
+      class="w-full mb-3 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none">
+    <input id="password" type="password" placeholder="Password" 
+      class="w-full mb-4 p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none">
+
+    <button id="loginBtn" 
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition">
+      Masuk
+    </button>
+
+    <p class="text-sm mt-3 text-center">
+      Belum punya akun? 
+      <a href="signup.html" class="text-blue-600 font-medium hover:underline">Daftar</a>
+    </p>
+  </div>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+    // Konfigurasi Firebase (harus sama persis dengan signup.html)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeJMh6W7I3yVDQqEJQzw8CegsD8NYEVU4",
+      authDomain: "modul-trigono.firebaseapp.com",
+      projectId: "modul-trigono",
+      storageBucket: "modul-trigono.appspot.com",
+      messagingSenderId: "980014540419",
+      appId: "1:980014540419:web:86285499e9fe06c823ddb6",
+      measurementId: "G-NWLCNBXEQ6"
+    };
+
+    // Inisialisasi Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Elemen DOM
+    const loginBtn = document.getElementById("loginBtn");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    // Fungsi login
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        alert("Silakan isi email dan password terlebih dahulu!");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Sedang masuk...";
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Simpan UID ke localStorage
+        localStorage.setItem("uid", user.uid);
+        localStorage.setItem("loggedInUser", user.email);
+
+        alert("✅ Login berhasil!");
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Error saat login:", error);
+        if (error.code === "auth/user-not-found") {
+          alert("Email tidak ditemukan!");
+        } else if (error.code === "auth/wrong-password") {
+          alert("Password salah!");
+        } else {
+          alert("Login gagal: " + error.message);
+        }
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Masuk";
+      }
+    });
+
+    // 🔒 Cek status login otomatis
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem("uid", user.uid);
+        localStorage.setItem("loggedInUser", user.email);
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+</body>
+</html>
