@@ -430,6 +430,7 @@ onAuthStateChanged(auth, async (user) => {
       progressEl.style.width = "100%";
       const percentage = Math.round((score / totalQuestions) * 100);
 
+      
       resultEl.innerHTML = `
         <div class="flex flex-col items-center justify-center animate-fadeIn">
           <div class="relative w-32 h-32 mb-4">
@@ -446,11 +447,28 @@ onAuthStateChanged(auth, async (user) => {
           <button id="retry-btn" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors duration-300">
             Ulangi Quiz
           </button>
+
+          <button id="download-pembahasan"
+            class="m-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition">
+            Unduh Pembahasan
+          </button>
+
+          <button id="download-rapor"
+            class="m-2 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-medium transition">
+            Unduh Rapor
+          </button>
         </div>
       `;
       resultEl.classList.remove("hidden");
 
       document.getElementById("retry-btn").addEventListener("click", restartQuiz);
+
+      document.getElementById("download-pembahasan")
+      .addEventListener("click", downloadPembahasan);
+
+      document.getElementById("download-rapor")
+        .addEventListener("click", downloadRapor);
+
     }
 
     function updateProgress() {
@@ -467,6 +485,107 @@ onAuthStateChanged(auth, async (user) => {
       nextBtn.classList.remove("hidden");
       loadQuestion();
     }
+
+    function getSkillCategory(percentage) {
+      if (percentage >= 90) return "Sangat Baik";
+      if (percentage >= 80) return "Baik";
+      if (percentage >= 70) return "Cukup";
+      return "Perlu Bimbingan";
+    }
+
+    function getInterpretation(category) {
+      switch (category) {
+        case "Sangat Baik":
+          return "Siswa telah menguasai konsep trigonometri dengan sangat baik serta mampu menerapkan konsep secara tepat dalam penyelesaian soal.";
+        case "Baik":
+          return "Siswa telah memahami konsep trigonometri dengan baik, namun masih memerlukan penguatan pada beberapa bagian materi.";
+        case "Cukup":
+          return "Siswa memiliki pemahaman dasar trigonometri, namun perlu latihan lebih lanjut untuk meningkatkan ketepatan dan konsistensi.";
+        default:
+          return "Siswa memerlukan bimbingan lebih lanjut karena pemahaman konsep trigonometri masih belum optimal.";
+      }
+    }
+
+
+    function downloadPembahasan() {
+      const link = document.createElement("a");
+      link.href = "/my-app/public/source/materi/Pembahasan Soal Trigonometri.pdf";
+      link.download = "Pembahasan-Trigonometri.pdf";
+      link.click();
+    }
+
+
+    function downloadRapor() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const percentage = Math.round((score / totalQuestions) * 100);
+      const category = getSkillCategory(percentage);
+
+      /* === HEADER === */
+      doc.setFontSize(16);
+      doc.setTextColor(33, 150, 243);
+      doc.text("RAPOR HASIL LATIHAN SOAL", 105, 25, { align: "center" });
+
+      doc.setFontSize(11);
+      doc.setTextColor(100);
+      doc.text("Materi Trigonometri", 105, 32, { align: "center" });
+
+      doc.setDrawColor(33, 150, 243);
+      doc.setLineWidth(0.8);
+      doc.line(20, 38, 190, 38);
+
+      /* === NILAI UTAMA === */
+      doc.setFontSize(42);
+      doc.setTextColor(33, 150, 243);
+      doc.text(`${percentage}%`, 105, 65, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.setTextColor(60);
+      doc.text("Nilai Akhir", 105, 75, { align: "center" });
+
+      /* === RINGKASAN === */
+      doc.setLineWidth(0.3);
+      doc.line(20, 85, 190, 85);
+
+      doc.setFontSize(11);
+      doc.setTextColor(0);
+      doc.text(`Jumlah Soal      : ${totalQuestions}`, 30, 100);
+      doc.text(`Jawaban Benar    : ${score}`, 30, 108);
+      doc.text(`Kategori         : ${category}`, 30, 116);
+
+      /* === INTERPRETASI === */
+      doc.setDrawColor(200);
+      doc.rect(25, 125, 160, 40);
+
+      doc.setFontSize(12);
+      doc.setTextColor(33, 150, 243);
+      doc.text("Interpretasi Kemampuan", 30, 138);
+
+      doc.setFontSize(11);
+      doc.setTextColor(60);
+      doc.text(
+        getInterpretation(category),
+        30,
+        148,
+        { maxWidth: 150 }
+      );
+
+      /* === FOOTER === */
+      doc.setFontSize(9);
+      doc.setTextColor(150);
+      doc.text(
+        "Website Pembelajaran Matematika Berbasis CTML",
+        105,
+        285,
+        { align: "center" }
+      );
+
+      doc.save("rapor-hasil-belajar.pdf");
+    }
+
+
+
 
     nextBtn.addEventListener("click", nextQuestion);
     loadQuestion();
@@ -524,6 +643,10 @@ onAuthStateChanged(auth, async (user) => {
     </p>
   </div>
 </section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 
 </body>
